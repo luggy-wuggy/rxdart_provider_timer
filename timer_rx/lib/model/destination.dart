@@ -15,9 +15,9 @@ class Destination {
 }
 
 List<Destination> allDestinations = const <Destination>[
-  Destination('Presets', Icons.bookmark, Colors.cyan, PresetPage()),
-  Destination('Home', Icons.home, Colors.teal, HomePage()),
-  Destination('Setting', Icons.settings, Colors.orange, SettingsPage()),
+  Destination('Presets', Icons.bookmark, Colors.grey, PresetPage()),
+  Destination('Home', Icons.home, Colors.grey, HomePage()),
+  Destination('Setting', Icons.settings, Colors.grey, SettingsPage()),
 ];
 
 class DestinationView extends StatelessWidget {
