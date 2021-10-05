@@ -15,9 +15,9 @@ class Destination {
 }
 
 List<Destination> allDestinations = const <Destination>[
-  Destination('Presets', Icons.bookmark, Colors.grey, PresetPage()),
-  Destination('Home', Icons.home, Colors.grey, HomePage()),
-  Destination('Setting', Icons.settings, Colors.grey, SettingsPage()),
+  Destination('Presets', Icons.bookmark, Colors.indigo, PresetPage()),
+  Destination('Home', Icons.home, Colors.indigo, HomePage()),
+  Destination('Setting', Icons.settings, Colors.indigo, SettingsPage()),
 ];
 
 class DestinationView extends StatelessWidget {
@@ -29,10 +29,6 @@ class DestinationView extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(
-        title: Text(destination.title),
-        backgroundColor: destination.color,
-      ),
       backgroundColor: destination.color[100],
       body: destination.body,
     );

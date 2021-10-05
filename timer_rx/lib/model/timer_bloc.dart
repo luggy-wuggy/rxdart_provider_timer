@@ -20,7 +20,7 @@ class TimerBloc {
   late BehaviorSubject<String> _subjectRoundDisplay;
 
   ///The initial String value for the Stopwatch display
-  String initialDisplay = '00:05';
+  String initialRoundDurationDisplay = '00:05';
 
   ///The initial String value for the Round display
   String initialRoundDisplay = '1';
@@ -35,13 +35,14 @@ class TimerBloc {
   ///Takes in the local initialDisplay and initialIsRunning to seed the
   ///subject behaviours
   TimerBloc() {
-    _subjectTimeDisplay = BehaviorSubject<String>.seeded(initialDisplay);
+    _subjectTimeDisplay =
+        BehaviorSubject<String>.seeded(initialRoundDurationDisplay);
     _subjectIsRunning = BehaviorSubject<bool>.seeded(initialIsRunning);
     _subjectRoundDisplay = BehaviorSubject<String>.seeded(initialRoundDisplay);
   }
 
   ///A Stream for the Stopwatch String value
-  Stream<String> get timerObservable => _subjectTimeDisplay.stream;
+  Stream<String> get timerRoundObservable => _subjectTimeDisplay.stream;
 
   ///A Stream for the IsRunning bool value
   Stream<bool> get isRunningObservable => _subjectIsRunning.stream;
@@ -54,7 +55,9 @@ class TimerBloc {
   ///If the timer already has a value, it continues where it left off. Otherwise,
   ///it starts counting from 00:00
   void startTimer() {
+    print('TIMER');
     _subjectIsRunning.value = true;
+    print('TIMER');
     _sWatch.start();
     _startTimer();
   }
@@ -78,7 +81,7 @@ class TimerBloc {
       _sWatch.reset();
       _subjectRoundDisplay.sink
           .add((int.parse(_subjectRoundDisplay.value) + 1).toString());
-      _subjectTimeDisplay.sink.add(initialDisplay);
+      _subjectTimeDisplay.sink.add(initialRoundDurationDisplay);
     }
 
     if (_subjectRoundDisplay.value == finalRound &&
@@ -119,7 +122,7 @@ class TimerBloc {
     _sWatch.reset();
     _subjectIsRunning.value = false;
     _subjectRoundDisplay.sink.add(initialRoundDisplay);
-    _subjectTimeDisplay.sink.add(initialDisplay);
+    _subjectTimeDisplay.sink.add(initialRoundDurationDisplay);
   }
 
   ///Resumed the timer and continue updating the Stopwach display

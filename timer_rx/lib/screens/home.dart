@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:google_fonts/google_fonts.dart';
 import 'package:provider/provider.dart';
 import 'package:timer_rx/model/timer_bloc.dart';
 
@@ -19,10 +20,163 @@ class _HomePageState extends State<HomePage> {
     _timerBloc.dispose();
   }
 
+  bool tapDown = false;
+  bool startTapped = false;
+
   @override
   Widget build(BuildContext context) {
     _timerBloc = Provider.of<TimerBloc>(context);
 
+    return Container(
+      width: double.infinity,
+      height: double.infinity,
+      padding: const EdgeInsets.only(top: 120, left: 25, right: 25),
+      //child: initialMenu()
+      child: StreamBuilder<Object>(
+        stream: _timerBloc.isRunningObservable,
+        builder: (context, snapshot) {
+          bool _running = snapshot.hasData ? snapshot.data as bool : false;
+          print(_running);
+          return _running ? runningMenu(_timerBloc) : initialMenu();
+        },
+      ),
+    );
+  }
+
+  Widget runningMenu(TimerBloc _timerBloc) {
+    return Column(
+      mainAxisAlignment: MainAxisAlignment.center,
+      children: [
+        StreamBuilder<Object>(
+          stream: _timerBloc.roundObservable,
+          builder: (context, snapshot) {
+            return Text(
+              'ROUND ${snapshot.data}',
+              style: GoogleFonts.comfortaa(
+                fontSize: 55,
+                fontWeight: FontWeight.w800,
+                letterSpacing: -2,
+              ),
+            );
+          },
+        ),
+        const SizedBox(height: 25),
+        StreamBuilder(
+          stream: _timerBloc.timerRoundObservable,
+          builder: (context, snapshot) {
+            ///Checking if the Stream has data
+            ///
+            ///For some reason, the seeded option isn't working in the BLOC
+            ///
+            return snapshot.hasData
+                ? Text(
+                    '${snapshot.data}',
+                    style: GoogleFonts.comfortaa(
+                      fontSize: 25,
+                      fontWeight: FontWeight.w700,
+                    ),
+                  )
+                : const Text('ERROR');
+          },
+        ),
+      ],
+    );
+  }
+
+  Widget initialMenu() {
+    return Column(
+      mainAxisAlignment: MainAxisAlignment.center,
+      children: [
+        Text(
+          '${_timerBloc.finalRound} ROUNDS',
+          style: GoogleFonts.comfortaa(
+            fontSize: 55,
+            fontWeight: FontWeight.w800,
+            letterSpacing: -2,
+          ),
+        ),
+        const SizedBox(height: 25),
+        StreamBuilder<Object>(
+            stream: _timerBloc.timerRoundObservable,
+            builder: (context, snapshot) {
+              return Text(
+                'Round: ${snapshot.data}',
+                style: GoogleFonts.comfortaa(
+                  fontSize: 25,
+                  fontWeight: FontWeight.w700,
+                ),
+              );
+            }),
+        const SizedBox(height: 25),
+        Text(
+          'Break: ${_timerBloc.initialRoundDurationDisplay}',
+          style: GoogleFonts.comfortaa(
+            fontSize: 25,
+            fontWeight: FontWeight.w700,
+          ),
+        ),
+        const SizedBox(height: 50),
+        StreamBuilder(
+          stream: _timerBloc.isRunningObservable,
+          builder: (context, snapshot) {
+            bool _running = snapshot.hasData ? snapshot.data as bool : false;
+            return GestureDetector(
+                onTap: _running ? null : _timerBloc.startTimer,
+                child: AnimatedContainer(
+                  duration: const Duration(milliseconds: 500),
+                  height: 100,
+                  width: 400,
+                  decoration: BoxDecoration(
+                    color: tapDown
+                        ? Colors.lightGreenAccent
+                        : Colors.lightGreenAccent[700],
+                    borderRadius: const BorderRadius.all(Radius.circular(8)),
+                  ),
+                  child: Center(
+                    child: Text(
+                      'START',
+                      style: GoogleFonts.comfortaa(
+                        fontSize: tapDown ? 63 : 65,
+                        fontWeight: FontWeight.w800,
+                        letterSpacing: -2,
+                      ),
+                    ),
+                  ),
+                ));
+          },
+        ),
+        // GestureDetector(
+        //   onTap: () {
+        //     _timerBloc.startTimer;
+        //     print('what');
+        //   },
+        // child: AnimatedContainer(
+        //   duration: const Duration(milliseconds: 500),
+        //   height: 100,
+        //   width: 400,
+        //   decoration: BoxDecoration(
+        //     color: tapDown
+        //         ? Colors.lightGreenAccent
+        //         : Colors.lightGreenAccent[700],
+        //     borderRadius: const BorderRadius.all(Radius.circular(8)),
+        //   ),
+        //   child: Center(
+        //     child: Text(
+        //       'START',
+        //       style: GoogleFonts.comfortaa(
+        //         fontSize: tapDown ? 63 : 65,
+        //         fontWeight: FontWeight.w800,
+        //         letterSpacing: -2,
+        //       ),
+        //     ),
+        //   ),
+        //   ),
+        //)
+      ],
+    );
+  }
+
+  Widget model() {
     return Center(
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.center,
@@ -48,7 +202,7 @@ class _HomePageState extends State<HomePage> {
 
           ///Stream builder to watch the timer observable stream from the BLOC
           StreamBuilder(
-            stream: _timerBloc.timerObservable,
+            stream: _timerBloc.timerRoundObservable,
             builder: (context, snapshot) {
               ///Checking if the Stream has data
               ///
