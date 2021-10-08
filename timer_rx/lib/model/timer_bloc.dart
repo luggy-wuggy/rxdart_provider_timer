@@ -16,6 +16,8 @@ class TimerBloc {
   ///Creating a BehaviorSubject of type bool for the IsRunning variable
   late BehaviorSubject<bool> _subjectIsRunning;
 
+  late BehaviorSubject<bool> _subjectIsTimed;
+
   ///Creating a BehaviorSubject of type String for the Round display
   late BehaviorSubject<String> _subjectRoundDisplay;
 
@@ -31,6 +33,9 @@ class TimerBloc {
   ///The initial bool value for the IsRunning variable
   bool initialIsRunning = false;
 
+  ///The intial bool value for the IsTimed value
+  bool initialIsTimed = false;
+
   ///The class builder
   ///Takes in the local initialDisplay and initialIsRunning to seed the
   ///subject behaviours
@@ -39,6 +44,7 @@ class TimerBloc {
         BehaviorSubject<String>.seeded(initialRoundDurationDisplay);
     _subjectIsRunning = BehaviorSubject<bool>.seeded(initialIsRunning);
     _subjectRoundDisplay = BehaviorSubject<String>.seeded(initialRoundDisplay);
+    _subjectIsTimed = BehaviorSubject<bool>.seeded(initialIsTimed);
   }
 
   ///A Stream for the Stopwatch String value
@@ -50,14 +56,16 @@ class TimerBloc {
   ///A Stream for the Round String value
   Stream<String> get roundObservable => _subjectRoundDisplay.stream;
 
+  ///A Stream for the isTimed bool value
+  Stream<bool> get isTimedObservable => _subjectIsTimed.stream;
+
   ///Start the timer
   ///
   ///If the timer already has a value, it continues where it left off. Otherwise,
   ///it starts counting from 00:00
   void startTimer() {
-    print('TIMER');
     _subjectIsRunning.value = true;
-    print('TIMER');
+    _subjectIsTimed.value = true;
     _sWatch.start();
     _startTimer();
   }
@@ -121,6 +129,15 @@ class TimerBloc {
     _sWatch.stop();
     _sWatch.reset();
     _subjectIsRunning.value = false;
+    _subjectRoundDisplay.sink.add(initialRoundDisplay);
+    _subjectTimeDisplay.sink.add(initialRoundDurationDisplay);
+  }
+
+  void stopTimer() {
+    _sWatch.stop();
+    _sWatch.reset();
+    _subjectIsRunning.value = false;
+    _subjectIsTimed.value = false;
     _subjectRoundDisplay.sink.add(initialRoundDisplay);
     _subjectTimeDisplay.sink.add(initialRoundDurationDisplay);
   }

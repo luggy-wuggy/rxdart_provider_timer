@@ -33,17 +33,17 @@ class _HomePageState extends State<HomePage> {
       padding: const EdgeInsets.only(top: 120, left: 25, right: 25),
       //child: initialMenu()
       child: StreamBuilder<Object>(
-        stream: _timerBloc.isRunningObservable,
+        stream: _timerBloc.isTimedObservable,
         builder: (context, snapshot) {
           bool _running = snapshot.hasData ? snapshot.data as bool : false;
-          print(_running);
-          return _running ? runningMenu(_timerBloc) : initialMenu();
+          return _running ? runningMenu() : initialMenu();
+          //return runningMenu();
         },
       ),
     );
   }
 
-  Widget runningMenu(TimerBloc _timerBloc) {
+  Widget runningMenu() {
     return Column(
       mainAxisAlignment: MainAxisAlignment.center,
       children: [
@@ -79,6 +79,46 @@ class _HomePageState extends State<HomePage> {
                 : const Text('ERROR');
           },
         ),
+        const SizedBox(height: 25),
+        Row(
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: <Widget>[
+            ///Using a StreamBuilder to build the Pause button
+            ///
+            ///I build another bool, similar to the strart button, to check whether the
+            ///button should be enabled.
+            StreamBuilder(
+              stream: _timerBloc.isRunningObservable,
+              builder: (context, snapshot) {
+                bool _running =
+                    snapshot.hasData ? snapshot.data as bool : false;
+                return Row(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: <Widget>[
+                    ElevatedButton(
+                        onPressed: _running
+                            ? _timerBloc.pauseTimer
+                            : _timerBloc.startTimer,
+                        child: _running
+                            ? const Text('Pause')
+                            : const Text('Resume')),
+                  ],
+                );
+              },
+            ),
+
+            ///Seperating the Pause and Stop button by 30 pixels
+            const SizedBox(
+              width: 30,
+            ),
+
+            ///Reset button, always enabled
+            ElevatedButton(
+              onPressed: _timerBloc.stopTimer,
+              child: const Text('Stop'),
+            ),
+          ],
+        )
       ],
     );
   }
@@ -267,8 +307,8 @@ class _HomePageState extends State<HomePage> {
 
               ///Reset button, always enabled
               ElevatedButton(
-                onPressed: _timerBloc.resetTimer,
-                child: const Text('Reset'),
+                onPressed: _timerBloc.stopTimer,
+                child: const Text('Stop'),
               ),
             ],
           )
