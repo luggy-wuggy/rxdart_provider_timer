@@ -31,6 +31,10 @@ class TimerBloc {
   Stream<String> get totalTimeObservable => _subjectTotalTimeDisplay.stream;
   Stream<String> get setObservable => _subjectSetsDisplay.stream;
 
+  void setSet(String s) {
+    _subjectSetsDisplay.value = s;
+  }
+
   void dispose() {
     _subjectTimeDisplay.close();
     _subjectRoundTimeDisplay.close();

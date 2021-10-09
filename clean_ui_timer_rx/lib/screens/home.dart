@@ -16,6 +16,7 @@ class Home extends StatefulWidget {
 
 class _HomeState extends State<Home> {
   late TimerBloc _timerBloc;
+  late FixedExtentScrollController _setsScrollController;
 
   // ignore: todo
   /// TODO : MAKE this boolean into a stream
@@ -25,6 +26,7 @@ class _HomeState extends State<Home> {
   void dispose() {
     super.dispose();
     _timerBloc.dispose();
+    _setsScrollController.dispose();
   }
 
   @override
@@ -91,38 +93,37 @@ class _HomeState extends State<Home> {
       child: Row(
         mainAxisAlignment: MainAxisAlignment.spaceBetween,
         children: [
-          GestureDetector(
-            onTap: () {
-              showModalBottomSheet(
-                backgroundColor: Colors.transparent,
-                elevation: 0,
-                context: context,
-                builder: (BuildContext context) {
-                  return Container(
-                    height: 370,
-                    decoration: const BoxDecoration(
-                      color: Color.fromRGBO(12, 13, 12, 1),
-                      borderRadius: BorderRadius.only(
-                        topLeft: Radius.circular(45),
-                        topRight: Radius.circular(45),
-                      ),
-                    ),
-                    child: Center(
-                      child: Column(
-                        mainAxisAlignment: MainAxisAlignment.center,
-                        mainAxisSize: MainAxisSize.min,
-                        children: <Widget>[
-                          SizedBox(
-                            height: 220,
-                            child: StreamBuilder<String>(
-                                stream: _timerBloc.setObservable,
-                                builder: (context, snapshot) {
-                                  return CupertinoPicker(
-                                    scrollController:
-                                        FixedExtentScrollController(
-                                      initialItem:
-                                          setsList.indexOf('${snapshot.data}'),
-                                    ),
+          StreamBuilder<Object>(
+              stream: _timerBloc.setObservable,
+              builder: (context, snapshot) {
+                return GestureDetector(
+                  onTap: () async {
+                    _setsScrollController = FixedExtentScrollController(
+                        initialItem: setsList.indexOf("${snapshot.data}"));
+
+                    await showModalBottomSheet(
+                      backgroundColor: Colors.transparent,
+                      elevation: 0,
+                      context: context,
+                      builder: (BuildContext context) {
+                        return Container(
+                          height: 370,
+                          decoration: const BoxDecoration(
+                            color: Color.fromRGBO(12, 13, 12, 1),
+                            borderRadius: BorderRadius.only(
+                              topLeft: Radius.circular(45),
+                              topRight: Radius.circular(45),
+                            ),
+                          ),
+                          child: Center(
+                            child: Column(
+                              mainAxisAlignment: MainAxisAlignment.center,
+                              mainAxisSize: MainAxisSize.min,
+                              children: <Widget>[
+                                SizedBox(
+                                  height: 220,
+                                  child: CupertinoPicker(
+                                    scrollController: _setsScrollController,
                                     itemExtent: 40,
                                     onSelectedItemChanged: (int index) {},
                                     children: setsList.map((e) {
@@ -131,75 +132,78 @@ class _HomeState extends State<Home> {
                                         style: kTitleTabStyle,
                                       );
                                     }).toList(),
-                                  );
-                                }),
-                          ),
-                          const SizedBox(height: 15),
-                          GestureDetector(
-                            onTap: () {
-                              Navigator.pop(context);
-                            },
-                            child: Container(
-                              height: 55,
-                              width: 120,
-                              decoration: BoxDecoration(
-                                  borderRadius: const BorderRadius.all(
-                                    Radius.circular(17),
                                   ),
-                                  gradient: LinearGradient(
-                                    colors: [
-                                      Colors.blue[600] as Color,
-                                      Colors.blue[300] as Color,
-                                    ],
-                                    begin: Alignment.bottomLeft,
-                                    end: Alignment.topRight,
-                                  ),
-                                  boxShadow: [
-                                    BoxShadow(
-                                      color: Colors.blueGrey[900] as Color,
-                                      blurRadius: 10,
-                                      blurStyle: BlurStyle.normal,
-                                      offset: const Offset(0, 2),
+                                ),
+                                const SizedBox(height: 15),
+                                GestureDetector(
+                                  onTap: () {
+                                    Navigator.pop(context);
+                                    _timerBloc.setSet(setsList[
+                                        _setsScrollController.selectedItem]);
+                                  },
+                                  child: Container(
+                                    height: 55,
+                                    width: 120,
+                                    decoration: BoxDecoration(
+                                        borderRadius: const BorderRadius.all(
+                                          Radius.circular(17),
+                                        ),
+                                        gradient: LinearGradient(
+                                          colors: [
+                                            Colors.blue[600] as Color,
+                                            Colors.blue[300] as Color,
+                                          ],
+                                          begin: Alignment.bottomLeft,
+                                          end: Alignment.topRight,
+                                        ),
+                                        boxShadow: [
+                                          BoxShadow(
+                                            color:
+                                                Colors.blueGrey[900] as Color,
+                                            blurRadius: 10,
+                                            blurStyle: BlurStyle.normal,
+                                            offset: const Offset(0, 2),
+                                          ),
+                                        ]),
+                                    alignment: Alignment.center,
+                                    child: Text(
+                                      'Set',
+                                      style: kTitleTabStyle,
                                     ),
-                                  ]),
-                              alignment: Alignment.center,
-                              child: Text(
-                                'Set',
-                                style: kTitleTabStyle,
-                              ),
+                                  ),
+                                ),
+                                // ElevatedButton(
+                                //   child: const Text('Close BottomSheet'),
+                                //   onPressed: () => Navigator.pop(context),
+                                // )
+                              ],
                             ),
                           ),
-                          // ElevatedButton(
-                          //   child: const Text('Close BottomSheet'),
-                          //   onPressed: () => Navigator.pop(context),
-                          // )
-                        ],
-                      ),
-                    ),
-                  );
-                },
-              );
-            },
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                Text(
-                  'SETS',
-                  style: kSubTitleTabStyle,
-                ),
-                const SizedBox(height: 6),
-                StreamBuilder<Object>(
-                  stream: _timerBloc.setObservable,
-                  builder: (context, snapshot) {
-                    return Text(
-                      '${snapshot.data}',
-                      style: kTitleTabStyle,
+                        );
+                      },
                     );
                   },
-                ),
-              ],
-            ),
-          ),
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      Text(
+                        'SETS',
+                        style: kSubTitleTabStyle,
+                      ),
+                      const SizedBox(height: 6),
+                      StreamBuilder<Object>(
+                        stream: _timerBloc.setObservable,
+                        builder: (context, snapshot) {
+                          return Text(
+                            '${snapshot.data}',
+                            style: kTitleTabStyle,
+                          );
+                        },
+                      ),
+                    ],
+                  ),
+                );
+              }),
           Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
