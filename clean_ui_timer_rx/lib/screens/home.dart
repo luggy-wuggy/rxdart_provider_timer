@@ -1,5 +1,7 @@
 import 'package:clean_ui_timer_rx/bloc/timer_bloc.dart';
 import 'package:clean_ui_timer_rx/global/text_style.dart';
+import 'package:clean_ui_timer_rx/model/timer_settings.dart';
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
@@ -98,16 +100,9 @@ class _HomeState extends State<Home> {
                 builder: (BuildContext context) {
                   return Container(
                     height: 370,
-                    decoration: BoxDecoration(
-                      gradient: LinearGradient(
-                        colors: [
-                          Colors.grey[400] as Color,
-                          Colors.grey[100] as Color
-                        ],
-                        begin: Alignment.bottomCenter,
-                        end: Alignment.topCenter,
-                      ),
-                      borderRadius: const BorderRadius.only(
+                    decoration: const BoxDecoration(
+                      color: Color.fromRGBO(12, 13, 12, 1),
+                      borderRadius: BorderRadius.only(
                         topLeft: Radius.circular(45),
                         topRight: Radius.circular(45),
                       ),
@@ -117,19 +112,67 @@ class _HomeState extends State<Home> {
                         mainAxisAlignment: MainAxisAlignment.center,
                         mainAxisSize: MainAxisSize.min,
                         children: <Widget>[
-                          ListWheelScrollView(
-                            itemExtent: 42,
-                            children: [
-                              Text('1'),
-                              Text('1'),
-                              Text('1'),
-                              Text('1'),
-                            ],
+                          SizedBox(
+                            height: 220,
+                            child: StreamBuilder<String>(
+                                stream: _timerBloc.setObservable,
+                                builder: (context, snapshot) {
+                                  return CupertinoPicker(
+                                    scrollController:
+                                        FixedExtentScrollController(
+                                      initialItem:
+                                          setsList.indexOf('${snapshot.data}'),
+                                    ),
+                                    itemExtent: 40,
+                                    onSelectedItemChanged: (int index) {},
+                                    children: setsList.map((e) {
+                                      return Text(
+                                        e,
+                                        style: kTitleTabStyle,
+                                      );
+                                    }).toList(),
+                                  );
+                                }),
                           ),
-                          ElevatedButton(
-                            child: const Text('Close BottomSheet'),
-                            onPressed: () => Navigator.pop(context),
-                          )
+                          const SizedBox(height: 15),
+                          GestureDetector(
+                            onTap: () {
+                              Navigator.pop(context);
+                            },
+                            child: Container(
+                              height: 55,
+                              width: 120,
+                              decoration: BoxDecoration(
+                                  borderRadius: const BorderRadius.all(
+                                    Radius.circular(17),
+                                  ),
+                                  gradient: LinearGradient(
+                                    colors: [
+                                      Colors.blue[600] as Color,
+                                      Colors.blue[300] as Color,
+                                    ],
+                                    begin: Alignment.bottomLeft,
+                                    end: Alignment.topRight,
+                                  ),
+                                  boxShadow: [
+                                    BoxShadow(
+                                      color: Colors.blueGrey[900] as Color,
+                                      blurRadius: 10,
+                                      blurStyle: BlurStyle.normal,
+                                      offset: const Offset(0, 2),
+                                    ),
+                                  ]),
+                              alignment: Alignment.center,
+                              child: Text(
+                                'Set',
+                                style: kTitleTabStyle,
+                              ),
+                            ),
+                          ),
+                          // ElevatedButton(
+                          //   child: const Text('Close BottomSheet'),
+                          //   onPressed: () => Navigator.pop(context),
+                          // )
                         ],
                       ),
                     ),
