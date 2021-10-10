@@ -33,6 +33,35 @@ class TimerBloc {
 
   void setSet(String s) {
     _subjectSetsDisplay.value = s;
+    _updateTotalTime();
+  }
+
+  void _updateTotalTime() {
+    int set = int.parse(_subjectSetsDisplay.value);
+    Duration roundTime = Duration(
+        minutes: int.parse(_subjectRoundTimeDisplay.value.split(":")[0]),
+        seconds: int.parse(_subjectRoundTimeDisplay.value.split(":")[1]));
+
+    Duration breakTime = Duration(
+        minutes: int.parse(_subjectBreakTimeDisplay.value.split(":")[0]),
+        seconds: int.parse(_subjectBreakTimeDisplay.value.split(":")[1]));
+
+    print("SETS: $set");
+    print('ROUND TIME: $roundTime');
+    print('BREAK TIME: $breakTime');
+
+    Duration totalTime = (roundTime + breakTime) * set;
+    String stringTotalTime;
+
+    if (totalTime < const Duration(hours: 1)) {
+      stringTotalTime =
+          "${(totalTime.inMinutes % 60).toString().padLeft(2, '0')}:${(totalTime.inSeconds % 60).toString().padLeft(2, '0')}";
+    } else {
+      stringTotalTime =
+          "${(totalTime.inHours % 60).toString().padLeft(2, '0')}:${(totalTime.inMinutes % 60).toString().padLeft(2, '0')}:${(totalTime.inSeconds % 60).toString().padLeft(2, '0')}";
+    }
+
+    _subjectTotalTimeDisplay.value = stringTotalTime;
   }
 
   void dispose() {
