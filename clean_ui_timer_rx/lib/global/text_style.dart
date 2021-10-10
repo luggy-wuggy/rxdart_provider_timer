@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 
 TextStyle kTitleStyle = GoogleFonts.roboto(
-  fontSize: 40,
+  fontSize: 36,
   color: Colors.white,
   fontWeight: FontWeight.w700,
 );
