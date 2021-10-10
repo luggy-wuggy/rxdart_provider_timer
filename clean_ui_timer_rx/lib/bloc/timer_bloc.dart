@@ -38,6 +38,12 @@ class TimerBloc {
 
   void setRoundTime(String s) {
     _subjectRoundTimeDisplay.value = s;
+    _subjectTimeDisplay.value = s;
+    _updateTotalTime();
+  }
+
+  void setBreakTime(String s) {
+    _subjectBreakTimeDisplay.value = s;
     _updateTotalTime();
   }
 
