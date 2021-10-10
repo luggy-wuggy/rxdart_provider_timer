@@ -36,6 +36,11 @@ class TimerBloc {
     _updateTotalTime();
   }
 
+  void setRoundTime(String s) {
+    _subjectRoundTimeDisplay.value = s;
+    _updateTotalTime();
+  }
+
   void _updateTotalTime() {
     int set = int.parse(_subjectSetsDisplay.value);
     Duration roundTime = Duration(
@@ -46,19 +51,15 @@ class TimerBloc {
         minutes: int.parse(_subjectBreakTimeDisplay.value.split(":")[0]),
         seconds: int.parse(_subjectBreakTimeDisplay.value.split(":")[1]));
 
-    print("SETS: $set");
-    print('ROUND TIME: $roundTime');
-    print('BREAK TIME: $breakTime');
-
     Duration totalTime = (roundTime + breakTime) * set;
     String stringTotalTime;
 
     if (totalTime < const Duration(hours: 1)) {
       stringTotalTime =
-          "${(totalTime.inMinutes % 60).toString().padLeft(2, '0')}:${(totalTime.inSeconds % 60).toString().padLeft(2, '0')}";
+          "${(totalTime.inMinutes % 60).toString()}:${(totalTime.inSeconds % 60).toString().padLeft(2, '0')}";
     } else {
       stringTotalTime =
-          "${(totalTime.inHours % 60).toString().padLeft(2, '0')}:${(totalTime.inMinutes % 60).toString().padLeft(2, '0')}:${(totalTime.inSeconds % 60).toString().padLeft(2, '0')}";
+          "${(totalTime.inHours % 60).toString()}:${(totalTime.inMinutes % 60).toString().padLeft(2, '0')}:${(totalTime.inSeconds % 60).toString().padLeft(2, '0')}";
     }
 
     _subjectTotalTimeDisplay.value = stringTotalTime;
