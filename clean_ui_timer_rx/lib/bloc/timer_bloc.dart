@@ -8,6 +8,8 @@ class TimerBloc {
   late BehaviorSubject<String> _subjectTotalTimeDisplay;
   late BehaviorSubject<String> _subjectSetsDisplay;
 
+  late BehaviorSubject<bool> _subjectTimerIsPlaying;
+
   String initialTimeDisplay = "3:00";
   String initialRoundTimeDisplay = "3:00";
   String initialBreakTimeDisplay = "1:00";
@@ -23,6 +25,7 @@ class TimerBloc {
     _subjectTotalTimeDisplay =
         BehaviorSubject<String>.seeded(initialTotalTimeDisplay);
     _subjectSetsDisplay = BehaviorSubject<String>.seeded(initialSetsDisplay);
+    _subjectTimerIsPlaying = BehaviorSubject<bool>.seeded(false);
   }
 
   Stream<String> get timeObservable => _subjectTimeDisplay.stream;
@@ -30,6 +33,7 @@ class TimerBloc {
   Stream<String> get breakTimeObservable => _subjectBreakTimeDisplay.stream;
   Stream<String> get totalTimeObservable => _subjectTotalTimeDisplay.stream;
   Stream<String> get setObservable => _subjectSetsDisplay.stream;
+  Stream<bool> get isPlayingObservable => _subjectTimerIsPlaying.stream;
 
   void setSet(String s) {
     _subjectSetsDisplay.value = s;
@@ -45,6 +49,10 @@ class TimerBloc {
   void setBreakTime(String s) {
     _subjectBreakTimeDisplay.value = s;
     _updateTotalTime();
+  }
+
+  void toggleIsPlaying() {
+    _subjectTimerIsPlaying.value = !(_subjectTimerIsPlaying.value);
   }
 
   void _updateTotalTime() {

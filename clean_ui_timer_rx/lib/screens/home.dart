@@ -1,6 +1,5 @@
 import 'package:clean_ui_timer_rx/bloc/timer_bloc.dart';
 import 'package:clean_ui_timer_rx/global/text_style.dart';
-import 'package:clean_ui_timer_rx/model/timer_settings.dart';
 import 'package:clean_ui_timer_rx/widgets/bottom_bar.dart';
 import 'package:clean_ui_timer_rx/widgets/subheader.dart';
 import 'package:clean_ui_timer_rx/widgets/timer.dart';
@@ -17,10 +16,6 @@ class Home extends StatefulWidget {
 
 class _HomeState extends State<Home> {
   late TimerBloc _timerBloc;
-
-  // ignore: todo
-  /// TODO : MAKE this boolean into a stream
-  bool isPlaying = false;
 
   @override
   void dispose() {
@@ -46,9 +41,9 @@ class _HomeState extends State<Home> {
             ),
             const SubHeaderWidget(),
             const Spacer(),
-            TimerWidget(isPlaying),
+            TimerWidget(),
             const Spacer(),
-            BottomBarWidget(isPlaying),
+            BottomBarWidget(),
           ],
         ),
       ),
