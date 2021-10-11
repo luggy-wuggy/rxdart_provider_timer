@@ -17,9 +17,6 @@ class Home extends StatefulWidget {
 
 class _HomeState extends State<Home> {
   late TimerBloc _timerBloc;
-  late FixedExtentScrollController _setsScrollController;
-  late Duration roundDurationTime;
-  late Duration breakDurationTime;
 
   // ignore: todo
   /// TODO : MAKE this boolean into a stream
@@ -29,7 +26,6 @@ class _HomeState extends State<Home> {
   void dispose() {
     super.dispose();
     _timerBloc.dispose();
-    _setsScrollController.dispose();
   }
 
   @override
