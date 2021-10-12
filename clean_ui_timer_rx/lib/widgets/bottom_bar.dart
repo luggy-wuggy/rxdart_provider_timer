@@ -47,7 +47,7 @@ class _BottomBarWidgetState extends State<BottomBarWidget> {
 
               return GestureDetector(
                 onTap: () {
-                  _timerBloc.toggleIsPlaying();
+                  isPlaying ? _timerBloc.pauseTimer() : _timerBloc.startTimer();
                 },
                 child: AnimatedContainer(
                   duration: const Duration(milliseconds: 400),

@@ -2,6 +2,8 @@ import 'dart:async';
 import 'package:rxdart/rxdart.dart';
 
 class TimerBloc {
+  final Stopwatch _timer = Stopwatch();
+
   late BehaviorSubject<String> _subjectTimeDisplay;
   late BehaviorSubject<String> _subjectRoundTimeDisplay;
   late BehaviorSubject<String> _subjectBreakTimeDisplay;
@@ -34,6 +36,50 @@ class TimerBloc {
   Stream<String> get totalTimeObservable => _subjectTotalTimeDisplay.stream;
   Stream<String> get setObservable => _subjectSetsDisplay.stream;
   Stream<bool> get isPlayingObservable => _subjectTimerIsPlaying.stream;
+
+  void startTimer() {
+    _subjectTimerIsPlaying.value = true;
+    _timer.start();
+    _startTimer();
+  }
+
+  void pauseTimer() {
+    _subjectTimerIsPlaying.value = false;
+    _timer.stop();
+  }
+
+  void _startTimer() {
+    Timer(const Duration(seconds: 1), _keepRunning);
+  }
+
+  void _keepRunning() {
+    if (_timer.isRunning) {
+      _startTimer();
+    }
+
+    _elapseTime();
+  }
+
+  void _elapseTime() {
+    Duration displayTime = Duration(
+            minutes: int.parse(_subjectTimeDisplay.value.split(":")[0]),
+            seconds: int.parse(_subjectTimeDisplay.value.split(":")[1])) -
+        const Duration(seconds: 1);
+
+    Duration displayTotalTime = Duration(
+            minutes: int.parse(_subjectTotalTimeDisplay.value.split(":")[0]),
+            seconds: int.parse(_subjectTotalTimeDisplay.value.split(":")[1])) -
+        const Duration(seconds: 1);
+
+    final String stringDisplayTime =
+        "${(displayTime.inMinutes % 60).toString()}:${(displayTime.inSeconds % 60).toString().padLeft(2, '0')}";
+
+    final String stringTotalTime =
+        "${(displayTotalTime.inMinutes % 60).toString()}:${(displayTotalTime.inSeconds % 60).toString().padLeft(2, '0')}";
+
+    _subjectTimeDisplay.sink.add(stringDisplayTime);
+    _subjectTotalTimeDisplay.sink.add(stringTotalTime);
+  }
 
   void setSet(String s) {
     _subjectSetsDisplay.value = s;
@@ -76,7 +122,7 @@ class TimerBloc {
           "${(totalTime.inHours % 60).toString()}:${(totalTime.inMinutes % 60).toString().padLeft(2, '0')}:${(totalTime.inSeconds % 60).toString().padLeft(2, '0')}";
     }
 
-    _subjectTotalTimeDisplay.value = stringTotalTime;
+    _subjectTotalTimeDisplay.sink.add(stringTotalTime);
   }
 
   void dispose() {
