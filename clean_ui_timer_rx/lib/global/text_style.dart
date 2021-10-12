@@ -21,6 +21,6 @@ TextStyle kTitleTabStyle = GoogleFonts.roboto(
 
 TextStyle kTimerStyle = GoogleFonts.roboto(
   color: Colors.white,
-  fontSize: 65,
-  fontWeight: FontWeight.w700,
+  fontSize: 55,
+  fontWeight: FontWeight.w400,
 );

@@ -1,6 +1,7 @@
 import 'package:clean_ui_timer_rx/bloc/timer_bloc.dart';
 import 'package:clean_ui_timer_rx/global/text_style.dart';
 import 'package:flutter/material.dart';
+import 'package:google_fonts/google_fonts.dart';
 import 'package:provider/provider.dart';
 
 // ignore: must_be_immutable
@@ -27,8 +28,8 @@ class TimerWidget extends StatelessWidget {
 
             return AnimatedContainer(
               duration: const Duration(milliseconds: 400),
-              height: 240,
-              width: 240,
+              height: 280,
+              width: 280,
               decoration: BoxDecoration(
                 boxShadow: [
                   isPlaying
@@ -58,15 +59,33 @@ class TimerWidget extends StatelessWidget {
                   end: Alignment.topRight,
                 ),
               ),
-              alignment: Alignment.center,
-              child: StreamBuilder<Object>(
-                stream: _timerBloc.timeObservable,
-                builder: (context, snapshot) {
-                  return Text(
-                    '${snapshot.data}',
-                    style: kTimerStyle,
-                  );
-                },
+              child: Column(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  StreamBuilder<Object>(
+                    stream: _timerBloc.setsTimerObservable,
+                    builder: (context, snapshot) {
+                      return Text(
+                        'Set ${snapshot.data}',
+                        style: kTimerStyle,
+                      );
+                    },
+                  ),
+                  Container(
+                    height: 1,
+                    width: 75,
+                    color: Colors.white,
+                  ),
+                  StreamBuilder<Object>(
+                    stream: _timerBloc.timeObservable,
+                    builder: (context, snapshot) {
+                      return Text(
+                        '${snapshot.data}',
+                        style: kTimerStyle,
+                      );
+                    },
+                  ),
+                ],
               ),
             );
           },

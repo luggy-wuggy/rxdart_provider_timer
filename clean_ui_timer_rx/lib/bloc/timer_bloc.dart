@@ -8,7 +8,8 @@ class TimerBloc {
   late BehaviorSubject<String> _subjectRoundTimeDisplay;
   late BehaviorSubject<String> _subjectBreakTimeDisplay;
   late BehaviorSubject<String> _subjectTotalTimeDisplay;
-  late BehaviorSubject<String> _subjectSetsDisplay;
+  late BehaviorSubject<String> _subjectSetsSettingDisplay;
+  late BehaviorSubject<String> _subjectSetsTimerDisplay;
 
   late BehaviorSubject<bool> _subjectTimerIsPlaying;
   late BehaviorSubject<bool> _subjectTimerIsRound;
@@ -16,8 +17,9 @@ class TimerBloc {
   String initialTimeDisplay = "0:07";
   String initialRoundTimeDisplay = "0:07";
   String initialBreakTimeDisplay = "0:04";
-  String initialSetsDisplay = "3";
+  String initialSetsSettingDisplay = "3";
   String initialTotalTimeDisplay = "0:30";
+  String initialSetsTimerDisplay = "1";
 
   int roundCounter = 1;
 
@@ -29,7 +31,10 @@ class TimerBloc {
         BehaviorSubject<String>.seeded(initialBreakTimeDisplay);
     _subjectTotalTimeDisplay =
         BehaviorSubject<String>.seeded(initialTotalTimeDisplay);
-    _subjectSetsDisplay = BehaviorSubject<String>.seeded(initialSetsDisplay);
+    _subjectSetsSettingDisplay =
+        BehaviorSubject<String>.seeded(initialSetsSettingDisplay);
+    _subjectSetsTimerDisplay =
+        BehaviorSubject<String>.seeded(initialSetsTimerDisplay);
     _subjectTimerIsPlaying = BehaviorSubject<bool>.seeded(false);
     _subjectTimerIsRound = BehaviorSubject<bool>.seeded(false);
   }
@@ -38,7 +43,8 @@ class TimerBloc {
   Stream<String> get roundTimeObservable => _subjectRoundTimeDisplay.stream;
   Stream<String> get breakTimeObservable => _subjectBreakTimeDisplay.stream;
   Stream<String> get totalTimeObservable => _subjectTotalTimeDisplay.stream;
-  Stream<String> get setObservable => _subjectSetsDisplay.stream;
+  Stream<String> get setSettingObservable => _subjectSetsSettingDisplay.stream;
+  Stream<String> get setsTimerObservable => _subjectSetsTimerDisplay.stream;
   Stream<bool> get isPlayingObservable => _subjectTimerIsPlaying.stream;
   Stream<bool> get isTimerRoundObservable => _subjectTimerIsRound.stream;
 
@@ -54,20 +60,8 @@ class TimerBloc {
     _timer.stop();
   }
 
-  void _startTimer() {
-    Timer(const Duration(seconds: 1), _keepRunning);
-  }
-
-  void _keepRunning() async {
-    await _elapseTime();
-
-    if (_timer.isRunning) {
-      _startTimer();
-    }
-  }
-
   void setSet(String s) {
-    _subjectSetsDisplay.value = s;
+    _subjectSetsSettingDisplay.value = s;
     _updateTotalTime();
   }
 
@@ -86,22 +80,36 @@ class TimerBloc {
     _subjectTimerIsPlaying.value = !(_subjectTimerIsPlaying.value);
   }
 
+  void _startTimer() {
+    Timer(const Duration(seconds: 1), _keepRunning);
+  }
+
+  void _keepRunning() async {
+    await _elapseTime();
+
+    if (_timer.isRunning) {
+      _startTimer();
+    }
+  }
+
   Future<void> _toggleRoundBreak() async {
     /// Round to Break
     if (_subjectTimerIsRound.value) {
       if (_subjectTimeDisplay.value == '0:00') {
         _subjectTimerIsRound.sink.add(!_subjectTimerIsRound.value);
         _subjectTimeDisplay.sink.add(_subjectBreakTimeDisplay.value);
-        await Future.delayed(Duration(seconds: 1));
+        await Future.delayed(const Duration(seconds: 1));
       }
     }
 
     /// Break to Round
     else {
       if (_subjectTimeDisplay.value == '0:00') {
+        _subjectSetsTimerDisplay.sink
+            .add((int.parse(_subjectSetsTimerDisplay.value) + 1).toString());
         _subjectTimerIsRound.sink.add(!_subjectTimerIsRound.value);
         _subjectTimeDisplay.sink.add(_subjectRoundTimeDisplay.value);
-        await Future.delayed(Duration(seconds: 1));
+        await Future.delayed(const Duration(seconds: 1));
       }
     }
   }
@@ -130,7 +138,7 @@ class TimerBloc {
   }
 
   void _updateTotalTime() {
-    int set = int.parse(_subjectSetsDisplay.value);
+    int set = int.parse(_subjectSetsSettingDisplay.value);
     Duration roundTime = Duration(
         minutes: int.parse(_subjectRoundTimeDisplay.value.split(":")[0]),
         seconds: int.parse(_subjectRoundTimeDisplay.value.split(":")[1]));
@@ -158,6 +166,6 @@ class TimerBloc {
     _subjectRoundTimeDisplay.close();
     _subjectBreakTimeDisplay.close();
     _subjectTotalTimeDisplay.close();
-    _subjectSetsDisplay.close();
+    _subjectSetsSettingDisplay.close();
   }
 }

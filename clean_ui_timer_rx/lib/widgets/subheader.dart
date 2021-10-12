@@ -44,7 +44,7 @@ class _SubHeaderWidgetState extends State<SubHeaderWidget> {
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
                   StreamBuilder<Object>(
-                      stream: _timerBloc.setObservable,
+                      stream: _timerBloc.setSettingObservable,
                       builder: (context, snapshot) {
                         return GestureDetector(
                           onTap: () async {

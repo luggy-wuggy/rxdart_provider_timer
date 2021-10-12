@@ -54,14 +54,9 @@ class _HomeState extends State<Home> {
     return Row(
       mainAxisAlignment: MainAxisAlignment.spaceBetween,
       children: [
-        StreamBuilder<Object>(
-          stream: _timerBloc.setObservable,
-          builder: (context, snapshot) {
-            return Text(
-              'Interval Timer',
-              style: kTitleStyle,
-            );
-          },
+        Text(
+          'Interval Timer',
+          style: kTitleStyle,
         ),
         Container(
           height: 40,
