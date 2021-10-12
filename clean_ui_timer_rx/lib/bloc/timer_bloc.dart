@@ -40,7 +40,7 @@ class TimerBloc {
   Stream<String> get totalTimeObservable => _subjectTotalTimeDisplay.stream;
   Stream<String> get setObservable => _subjectSetsDisplay.stream;
   Stream<bool> get isPlayingObservable => _subjectTimerIsPlaying.stream;
-  Stream<bool> get isTimerRound => _subjectTimerIsRound.stream;
+  Stream<bool> get isTimerRoundObservable => _subjectTimerIsRound.stream;
 
   void startTimer() {
     _subjectTimerIsPlaying.value = true;

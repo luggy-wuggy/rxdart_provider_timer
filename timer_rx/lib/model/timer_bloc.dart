@@ -102,11 +102,11 @@ class TimerBloc {
       _startTimer();
     }
 
-    _subjectTimeDisplay.sink.add(_formatStopWatch(_sWatch));
+    _subjectTimeDisplay.sink.add(_formatStopWatch());
   }
 
   ///Formats the StopWatch elapsed time into the 00:00 format
-  String _formatStopWatch(Stopwatch _swatch) {
+  String _formatStopWatch() {
     Duration time = Duration(
             minutes: int.parse(_subjectTimeDisplay.value.substring(0, 2)),
             seconds: int.parse(_subjectTimeDisplay.value.substring(3))) -
