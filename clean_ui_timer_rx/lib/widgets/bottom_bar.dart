@@ -23,23 +23,33 @@ class _BottomBarWidgetState extends State<BottomBarWidget> {
       child: Row(
         mainAxisAlignment: MainAxisAlignment.spaceEvenly,
         children: [
-          Container(
-            height: 60,
-            width: 60,
-            decoration: BoxDecoration(
-              shape: BoxShape.circle,
-              color: Colors.grey[900],
-            ),
-            alignment: Alignment.center,
-            child: Container(
-              height: 20,
-              width: 20,
-              decoration: const BoxDecoration(
-                borderRadius: BorderRadius.all(Radius.circular(3)),
-                color: Colors.white,
-              ),
-            ),
-          ),
+          StreamBuilder<Object>(
+              stream: _timerBloc.isPlayingObservable,
+              builder: (context, snapshot) {
+                isPlaying = snapshot.hasData ? snapshot.data as bool : false;
+                return GestureDetector(
+                  onTap: () async {
+                    await _timerBloc.stopTimer();
+                  },
+                  child: Container(
+                    height: 60,
+                    width: 60,
+                    decoration: BoxDecoration(
+                      shape: BoxShape.circle,
+                      color: Colors.grey[900],
+                    ),
+                    alignment: Alignment.center,
+                    child: Container(
+                      height: 20,
+                      width: 20,
+                      decoration: const BoxDecoration(
+                        borderRadius: BorderRadius.all(Radius.circular(3)),
+                        color: Colors.white,
+                      ),
+                    ),
+                  ),
+                );
+              }),
           StreamBuilder<Object>(
             stream: _timerBloc.isPlayingObservable,
             builder: (context, snapshot) {

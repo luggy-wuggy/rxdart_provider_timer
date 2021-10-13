@@ -18,7 +18,7 @@ class TimerBloc {
   String initialRoundTimeDisplay = "0:07";
   String initialBreakTimeDisplay = "0:04";
   String initialSetsSettingDisplay = "3";
-  String initialTotalTimeDisplay = "0:30";
+  String initialTotalTimeDisplay = "0:33";
   String initialSetsTimerDisplay = "1";
 
   int roundCounter = 1;
@@ -55,13 +55,25 @@ class TimerBloc {
     _startTimer();
   }
 
+  Future<void> stopTimer() async {
+    _timer.stop();
+    _timer.reset();
+    _subjectTimerIsPlaying.sink.add(false);
+
+    Future.delayed(const Duration(milliseconds: 500), () {
+      _subjectTimeDisplay.sink.add(_subjectRoundTimeDisplay.value);
+      _subjectSetsTimerDisplay.sink.add("1");
+    });
+  }
+
   void pauseTimer() {
     _subjectTimerIsPlaying.value = false;
     _timer.stop();
+    _timer.reset();
   }
 
   void setSet(String s) {
-    _subjectSetsSettingDisplay.value = s;
+    _subjectSetsTimerDisplay.sink.add(s);
     _updateTotalTime();
   }
 
@@ -74,10 +86,6 @@ class TimerBloc {
   void setBreakTime(String s) {
     _subjectBreakTimeDisplay.value = s;
     _updateTotalTime();
-  }
-
-  void toggleIsPlaying() {
-    _subjectTimerIsPlaying.value = !(_subjectTimerIsPlaying.value);
   }
 
   void _startTimer() {
@@ -167,5 +175,6 @@ class TimerBloc {
     _subjectBreakTimeDisplay.close();
     _subjectTotalTimeDisplay.close();
     _subjectSetsSettingDisplay.close();
+    _subjectSetsTimerDisplay.close();
   }
 }
