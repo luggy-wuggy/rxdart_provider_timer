@@ -60,9 +60,10 @@ class TimerBloc {
     _timer.reset();
     _subjectTimerIsPlaying.sink.add(false);
 
-    Future.delayed(const Duration(milliseconds: 500), () {
+    Future.delayed(const Duration(milliseconds: 800), () {
       _subjectTimeDisplay.sink.add(_subjectRoundTimeDisplay.value);
       _subjectSetsTimerDisplay.sink.add("1");
+      _updateTotalTime();
     });
   }
 
