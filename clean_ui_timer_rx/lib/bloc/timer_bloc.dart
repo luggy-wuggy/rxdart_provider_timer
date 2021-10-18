@@ -1,8 +1,10 @@
 import 'dart:async';
+import 'package:clean_ui_timer_rx/model/audio_timer.dart';
 import 'package:rxdart/rxdart.dart';
 
 class TimerBloc {
   final Stopwatch _timer = Stopwatch();
+  final AudioTimer audioTimer = AudioTimer();
 
   late BehaviorSubject<String> _subjectTimeDisplay;
   late BehaviorSubject<String> _subjectRoundTimeDisplay;
@@ -49,6 +51,7 @@ class TimerBloc {
   Stream<bool> get isTimerRoundObservable => _subjectTimerIsRound.stream;
 
   void startTimer() {
+    audioTimer.playStartTimer();
     _subjectTimerIsPlaying.value = true;
     _subjectTimerIsRound.sink.add(true);
     _timer.start();
@@ -105,6 +108,7 @@ class TimerBloc {
     /// Round to Break
     if (_subjectTimerIsRound.value) {
       if (_subjectTimeDisplay.value == '0:00') {
+        audioTimer.playRoundEnd();
         _subjectTimerIsRound.sink.add(!_subjectTimerIsRound.value);
         _subjectTimeDisplay.sink.add(_subjectBreakTimeDisplay.value);
         await Future.delayed(const Duration(seconds: 1));
@@ -114,6 +118,7 @@ class TimerBloc {
     /// Break to Round
     else {
       if (_subjectTimeDisplay.value == '0:00') {
+        audioTimer.playRoundStart();
         _subjectSetsTimerDisplay.sink
             .add((int.parse(_subjectSetsTimerDisplay.value) + 1).toString());
         _subjectTimerIsRound.sink.add(!_subjectTimerIsRound.value);
