@@ -15,6 +15,7 @@ class TimerBloc {
 
   late BehaviorSubject<bool> _subjectTimerIsPlaying;
   late BehaviorSubject<bool> _subjectTimerIsRound;
+  late BehaviorSubject<bool> _subjectTimerStarted;
 
   String initialTimeDisplay = "0:07";
   String initialRoundTimeDisplay = "0:07";
@@ -39,6 +40,7 @@ class TimerBloc {
         BehaviorSubject<String>.seeded(initialSetsTimerDisplay);
     _subjectTimerIsPlaying = BehaviorSubject<bool>.seeded(false);
     _subjectTimerIsRound = BehaviorSubject<bool>.seeded(false);
+    _subjectTimerStarted = BehaviorSubject<bool>.seeded(false);
   }
 
   Stream<String> get timeObservable => _subjectTimeDisplay.stream;
@@ -49,11 +51,20 @@ class TimerBloc {
   Stream<String> get setsTimerObservable => _subjectSetsTimerDisplay.stream;
   Stream<bool> get isPlayingObservable => _subjectTimerIsPlaying.stream;
   Stream<bool> get isTimerRoundObservable => _subjectTimerIsRound.stream;
+  Stream<bool> get isTimerStartedObservable => _subjectTimerStarted.stream;
 
   void startTimer() {
     audioTimer.playStartTimer();
     _subjectTimerIsPlaying.value = true;
     _subjectTimerIsRound.sink.add(true);
+    _subjectTimerStarted.value = true;
+    _timer.start();
+    _startTimer();
+  }
+
+  void resumeTimer() {
+    audioTimer.playStartTimer();
+    _subjectTimerIsPlaying.value = true;
     _timer.start();
     _startTimer();
   }
@@ -61,7 +72,8 @@ class TimerBloc {
   Future<void> stopTimer() async {
     _timer.stop();
     _timer.reset();
-    _subjectTimerIsPlaying.sink.add(false);
+    _subjectTimerIsPlaying.value = false;
+    _subjectTimerStarted.value = false;
 
     Future.delayed(const Duration(milliseconds: 800), () {
       _subjectTimeDisplay.sink.add(_subjectRoundTimeDisplay.value);
@@ -74,6 +86,15 @@ class TimerBloc {
     _subjectTimerIsPlaying.value = false;
     _timer.stop();
     _timer.reset();
+  }
+
+  void rewindTimer() {
+    if (_subjectTimerIsRound.value) {
+      _subjectTimeDisplay.sink.add(_subjectRoundTimeDisplay.value);
+    } else if (!_subjectTimerIsRound.value &&
+        _subjectSetsTimerDisplay.value != "1") {
+      _subjectTimeDisplay.sink.add(_subjectBreakTimeDisplay.value);
+    }
   }
 
   void setSet(String s) {
@@ -150,6 +171,8 @@ class TimerBloc {
     _subjectTimeDisplay.sink.add(stringDisplayTime);
     _subjectTotalTimeDisplay.sink.add(stringTotalTime);
   }
+
+  void _updateTotalTimeByRewind() {}
 
   void _updateTotalTime() {
     int set = int.parse(_subjectSetsSettingDisplay.value);
