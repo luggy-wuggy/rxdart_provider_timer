@@ -75,7 +75,7 @@ class TimerBloc {
     _subjectTimerIsPlaying.value = false;
     _subjectTimerStarted.value = false;
 
-    Future.delayed(const Duration(milliseconds: 800), () {
+    Future.delayed(const Duration(milliseconds: 920), () {
       _subjectTimeDisplay.sink.add(_subjectRoundTimeDisplay.value);
       _subjectSetsTimerDisplay.sink.add("1");
       _updateTotalTime();

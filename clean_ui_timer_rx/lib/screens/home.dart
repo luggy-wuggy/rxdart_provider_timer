@@ -1,6 +1,7 @@
 import 'package:clean_ui_timer_rx/bloc/timer_bloc.dart';
 import 'package:clean_ui_timer_rx/global/text_style.dart';
 import 'package:clean_ui_timer_rx/widgets/bottom_bar.dart';
+import 'package:clean_ui_timer_rx/widgets/header.dart';
 import 'package:clean_ui_timer_rx/widgets/subheader.dart';
 import 'package:clean_ui_timer_rx/widgets/timer.dart';
 import 'package:flutter/cupertino.dart';
@@ -35,7 +36,7 @@ class _HomeState extends State<Home> {
           mainAxisAlignment: MainAxisAlignment.start,
           crossAxisAlignment: CrossAxisAlignment.center,
           children: [
-            headerWidget(),
+            const HeaderWidget(),
             const SizedBox(
               height: 25,
             ),
@@ -47,32 +48,6 @@ class _HomeState extends State<Home> {
           ],
         ),
       ),
-    );
-  }
-
-  Widget headerWidget() {
-    return Row(
-      mainAxisAlignment: MainAxisAlignment.spaceBetween,
-      children: [
-        Text(
-          'Interval Timer',
-          style: kTitleStyle,
-        ),
-        Container(
-          height: 40,
-          width: 40,
-          decoration: BoxDecoration(
-            color: Colors.grey[900],
-            shape: BoxShape.circle,
-          ),
-          alignment: Alignment.center,
-          child: const Icon(
-            Icons.settings,
-            color: Colors.white,
-            size: 25,
-          ),
-        ),
-      ],
     );
   }
 }

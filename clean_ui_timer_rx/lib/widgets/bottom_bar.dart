@@ -15,6 +15,12 @@ class _BottomBarWidgetState extends State<BottomBarWidget> {
   late TimerBloc _timerBloc;
 
   @override
+  void dispose() {
+    super.dispose();
+    _timerBloc.dispose();
+  }
+
+  @override
   Widget build(BuildContext context) {
     _timerBloc = Provider.of<TimerBloc>(context);
 

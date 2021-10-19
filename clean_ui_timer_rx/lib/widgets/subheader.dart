@@ -24,6 +24,7 @@ class _SubHeaderWidgetState extends State<SubHeaderWidget> {
   @override
   void dispose() {
     super.dispose();
+    _timerBloc.dispose();
     _setsScrollController.dispose();
   }
 
