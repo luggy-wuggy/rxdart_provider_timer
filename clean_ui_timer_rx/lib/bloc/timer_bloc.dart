@@ -88,7 +88,9 @@ class TimerBloc {
     _timer.reset();
   }
 
-  void rewindTimer() {
+  Future<void> rewindTimer() async {
+    await _updateTotalTimeByRewind();
+
     if (_subjectTimerIsRound.value) {
       _subjectTimeDisplay.sink.add(_subjectRoundTimeDisplay.value);
     } else if (!_subjectTimerIsRound.value &&
@@ -172,7 +174,45 @@ class TimerBloc {
     _subjectTotalTimeDisplay.sink.add(stringTotalTime);
   }
 
-  void _updateTotalTimeByRewind() {}
+  Future<void> _updateTotalTimeByRewind() async {
+    Duration totalTime = Duration(
+        minutes: int.parse(_subjectTotalTimeDisplay.value.split(":")[0]),
+        seconds: int.parse(_subjectTotalTimeDisplay.value.split(":")[1]));
+
+    Duration elapsedTime;
+
+    if (_subjectTimerIsRound.value) {
+      elapsedTime = Duration(
+              minutes: int.parse(_subjectRoundTimeDisplay.value.split(":")[0]),
+              seconds:
+                  int.parse(_subjectRoundTimeDisplay.value.split(":")[1])) -
+          Duration(
+              minutes: int.parse(_subjectTimeDisplay.value.split(":")[0]),
+              seconds: int.parse(_subjectTimeDisplay.value.split(":")[1]));
+    } else {
+      elapsedTime = Duration(
+              minutes: int.parse(_subjectBreakTimeDisplay.value.split(":")[0]),
+              seconds:
+                  int.parse(_subjectBreakTimeDisplay.value.split(":")[1])) -
+          Duration(
+              minutes: int.parse(_subjectTimeDisplay.value.split(":")[0]),
+              seconds: int.parse(_subjectTimeDisplay.value.split(":")[1]));
+    }
+
+    totalTime = totalTime + elapsedTime;
+
+    String stringTotalTime;
+
+    if (totalTime < const Duration(hours: 1)) {
+      stringTotalTime =
+          "${(totalTime.inMinutes % 60).toString()}:${(totalTime.inSeconds % 60).toString().padLeft(2, '0')}";
+    } else {
+      stringTotalTime =
+          "${(totalTime.inHours % 60).toString()}:${(totalTime.inMinutes % 60).toString().padLeft(2, '0')}:${(totalTime.inSeconds % 60).toString().padLeft(2, '0')}";
+    }
+
+    _subjectTotalTimeDisplay.sink.add(stringTotalTime);
+  }
 
   void _updateTotalTime() {
     int set = int.parse(_subjectSetsSettingDisplay.value);

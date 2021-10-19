@@ -106,8 +106,8 @@ class _BottomBarWidgetState extends State<BottomBarWidget> {
             },
           ),
           GestureDetector(
-            onTap: () {
-              _timerBloc.rewindTimer();
+            onTap: () async {
+              await _timerBloc.rewindTimer();
             },
             child: Container(
               height: 60,
