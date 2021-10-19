@@ -100,7 +100,7 @@ class TimerBloc {
   }
 
   void setSet(String s) {
-    _subjectSetsTimerDisplay.sink.add(s);
+    _subjectSetsSettingDisplay.value = s;
     _updateTotalTime();
   }
 

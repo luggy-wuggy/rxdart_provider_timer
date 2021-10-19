@@ -1,5 +1,7 @@
 import 'package:clean_ui_timer_rx/bloc/timer_bloc.dart';
 import 'package:clean_ui_timer_rx/global/text_style.dart';
+import 'package:clean_ui_timer_rx/model/timer_settings.dart';
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
@@ -50,10 +52,30 @@ class _HeaderWidgetState extends State<HeaderWidget> {
               alignment: Alignment.center,
               child: isStarted
                   ? null
-                  : const Icon(
-                      Icons.settings,
-                      color: Colors.white,
-                      size: 25,
+                  : GestureDetector(
+                      onTap: () async {
+                        await showModalBottomSheet(
+                          backgroundColor: Colors.transparent,
+                          elevation: 0,
+                          context: context,
+                          builder: (BuildContext context) {
+                            return Container(
+                              decoration: const BoxDecoration(
+                                color: Color.fromRGBO(12, 13, 12, 1),
+                                borderRadius: BorderRadius.only(
+                                  topLeft: Radius.circular(45),
+                                  topRight: Radius.circular(45),
+                                ),
+                              ),
+                            );
+                          },
+                        );
+                      },
+                      child: const Icon(
+                        Icons.settings,
+                        color: Colors.white,
+                        size: 25,
+                      ),
                     ),
             ),
           ],
