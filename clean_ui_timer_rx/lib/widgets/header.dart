@@ -58,14 +58,261 @@ class _HeaderWidgetState extends State<HeaderWidget> {
                           backgroundColor: Colors.transparent,
                           elevation: 0,
                           context: context,
+                          isScrollControlled: true,
                           builder: (BuildContext context) {
                             return Container(
+                              padding: const EdgeInsets.symmetric(
+                                  horizontal: 30, vertical: 30),
+                              height: MediaQuery.of(context).size.height * 0.35,
                               decoration: const BoxDecoration(
                                 color: Color.fromRGBO(12, 13, 12, 1),
                                 borderRadius: BorderRadius.only(
                                   topLeft: Radius.circular(45),
                                   topRight: Radius.circular(45),
                                 ),
+                              ),
+                              child: Column(
+                                mainAxisAlignment: MainAxisAlignment.start,
+                                crossAxisAlignment: CrossAxisAlignment.start,
+                                children: [
+                                  Row(
+                                    children: [
+                                      Text(
+                                        'Settings',
+                                        style: kSubTitleStyle,
+                                      ),
+                                      Spacer(),
+                                    ],
+                                  ),
+                                  const SizedBox(
+                                    height: 25,
+                                  ),
+                                  GestureDetector(
+                                    onTap: () {
+                                      showModalBottomSheet(
+                                        backgroundColor: Colors.transparent,
+                                        elevation: 0,
+                                        context: context,
+                                        builder: (BuildContext context) {
+                                          return Container(
+                                            height: 370,
+                                            decoration: const BoxDecoration(
+                                              color:
+                                                  Color.fromRGBO(12, 13, 12, 1),
+                                              borderRadius: BorderRadius.only(
+                                                topLeft: Radius.circular(45),
+                                                topRight: Radius.circular(45),
+                                              ),
+                                            ),
+                                            child: Center(
+                                              child: Column(
+                                                mainAxisAlignment:
+                                                    MainAxisAlignment.center,
+                                                mainAxisSize: MainAxisSize.min,
+                                                children: <Widget>[
+                                                  SizedBox(
+                                                    height: 220,
+                                                    child: CupertinoPicker(
+                                                      itemExtent: 40,
+                                                      onSelectedItemChanged:
+                                                          (int index) {},
+                                                      children:
+                                                          warningList.map((e) {
+                                                        return Text(
+                                                          e,
+                                                          style: kTitleTabStyle,
+                                                        );
+                                                      }).toList(),
+                                                    ),
+                                                  ),
+                                                  const SizedBox(height: 15),
+                                                  GestureDetector(
+                                                    onTap: () {
+                                                      Navigator.pop(context);
+                                                    },
+                                                    child: Container(
+                                                      height: 55,
+                                                      width: 120,
+                                                      decoration: BoxDecoration(
+                                                          borderRadius:
+                                                              const BorderRadius
+                                                                  .all(
+                                                            Radius.circular(17),
+                                                          ),
+                                                          gradient:
+                                                              LinearGradient(
+                                                            colors: [
+                                                              Colors.blue[600]
+                                                                  as Color,
+                                                              Colors.blue[300]
+                                                                  as Color,
+                                                            ],
+                                                            begin: Alignment
+                                                                .bottomLeft,
+                                                            end: Alignment
+                                                                .topRight,
+                                                          ),
+                                                          boxShadow: [
+                                                            BoxShadow(
+                                                              color: Colors
+                                                                      .blueGrey[
+                                                                  900] as Color,
+                                                              blurRadius: 10,
+                                                              blurStyle:
+                                                                  BlurStyle
+                                                                      .normal,
+                                                              offset:
+                                                                  const Offset(
+                                                                      0, 2),
+                                                            ),
+                                                          ]),
+                                                      alignment:
+                                                          Alignment.center,
+                                                      child: Text(
+                                                        'Set',
+                                                        style: kTitleTabStyle,
+                                                      ),
+                                                    ),
+                                                  ),
+                                                ],
+                                              ),
+                                            ),
+                                          );
+                                        },
+                                      );
+                                    },
+                                    child: Column(
+                                      crossAxisAlignment:
+                                          CrossAxisAlignment.start,
+                                      children: [
+                                        Text(
+                                          'Round Warning Notice',
+                                          style: kHeaderStyle,
+                                        ),
+                                        Text(
+                                          '00:10',
+                                          style: kSubHeaderStyle,
+                                        ),
+                                      ],
+                                    ),
+                                  ),
+                                  const SizedBox(height: 15),
+                                  Container(
+                                    height: 1,
+                                    width: 75,
+                                    color: Colors.grey[600],
+                                  ),
+                                  const SizedBox(height: 15),
+                                  GestureDetector(
+                                    onTap: () {
+                                      showModalBottomSheet(
+                                        backgroundColor: Colors.transparent,
+                                        elevation: 0,
+                                        context: context,
+                                        builder: (BuildContext context) {
+                                          return Container(
+                                            height: 370,
+                                            decoration: const BoxDecoration(
+                                              color:
+                                                  Color.fromRGBO(12, 13, 12, 1),
+                                              borderRadius: BorderRadius.only(
+                                                topLeft: Radius.circular(45),
+                                                topRight: Radius.circular(45),
+                                              ),
+                                            ),
+                                            child: Center(
+                                              child: Column(
+                                                mainAxisAlignment:
+                                                    MainAxisAlignment.center,
+                                                mainAxisSize: MainAxisSize.min,
+                                                children: <Widget>[
+                                                  SizedBox(
+                                                    height: 220,
+                                                    child: CupertinoPicker(
+                                                      itemExtent: 40,
+                                                      onSelectedItemChanged:
+                                                          (int index) {},
+                                                      children:
+                                                          warningList.map((e) {
+                                                        return Text(
+                                                          e,
+                                                          style: kTitleTabStyle,
+                                                        );
+                                                      }).toList(),
+                                                    ),
+                                                  ),
+                                                  const SizedBox(height: 15),
+                                                  GestureDetector(
+                                                    onTap: () {
+                                                      Navigator.pop(context);
+                                                    },
+                                                    child: Container(
+                                                      height: 55,
+                                                      width: 120,
+                                                      decoration: BoxDecoration(
+                                                          borderRadius:
+                                                              const BorderRadius
+                                                                  .all(
+                                                            Radius.circular(17),
+                                                          ),
+                                                          gradient:
+                                                              LinearGradient(
+                                                            colors: [
+                                                              Colors.blue[600]
+                                                                  as Color,
+                                                              Colors.blue[300]
+                                                                  as Color,
+                                                            ],
+                                                            begin: Alignment
+                                                                .bottomLeft,
+                                                            end: Alignment
+                                                                .topRight,
+                                                          ),
+                                                          boxShadow: [
+                                                            BoxShadow(
+                                                              color: Colors
+                                                                      .blueGrey[
+                                                                  900] as Color,
+                                                              blurRadius: 10,
+                                                              blurStyle:
+                                                                  BlurStyle
+                                                                      .normal,
+                                                              offset:
+                                                                  const Offset(
+                                                                      0, 2),
+                                                            ),
+                                                          ]),
+                                                      alignment:
+                                                          Alignment.center,
+                                                      child: Text(
+                                                        'Set',
+                                                        style: kTitleTabStyle,
+                                                      ),
+                                                    ),
+                                                  ),
+                                                ],
+                                              ),
+                                            ),
+                                          );
+                                        },
+                                      );
+                                    },
+                                    child: Column(
+                                      crossAxisAlignment:
+                                          CrossAxisAlignment.start,
+                                      children: [
+                                        Text(
+                                          'End Warning Notice',
+                                          style: kHeaderStyle,
+                                        ),
+                                        Text(
+                                          '00:10',
+                                          style: kSubHeaderStyle,
+                                        ),
+                                      ],
+                                    ),
+                                  ),
+                                ],
                               ),
                             );
                           },

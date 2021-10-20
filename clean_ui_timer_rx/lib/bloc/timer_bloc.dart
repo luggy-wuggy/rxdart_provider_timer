@@ -17,14 +17,12 @@ class TimerBloc {
   late BehaviorSubject<bool> _subjectTimerIsRound;
   late BehaviorSubject<bool> _subjectTimerStarted;
 
-  String initialTimeDisplay = "0:07";
-  String initialRoundTimeDisplay = "0:07";
-  String initialBreakTimeDisplay = "0:04";
-  String initialSetsSettingDisplay = "3";
-  String initialTotalTimeDisplay = "0:33";
+  String initialTimeDisplay = "3:00";
+  String initialRoundTimeDisplay = "3:00";
+  String initialBreakTimeDisplay = "1:00";
+  String initialSetsSettingDisplay = "12";
+  String initialTotalTimeDisplay = "48:00";
   String initialSetsTimerDisplay = "1";
-
-  int roundCounter = 1;
 
   TimerBloc() {
     _subjectTimeDisplay = BehaviorSubject<String>.seeded(initialTimeDisplay);
@@ -75,7 +73,7 @@ class TimerBloc {
     _subjectTimerIsPlaying.value = false;
     _subjectTimerStarted.value = false;
 
-    Future.delayed(const Duration(milliseconds: 920), () {
+    Future.delayed(const Duration(milliseconds: 1000), () {
       _subjectTimeDisplay.sink.add(_subjectRoundTimeDisplay.value);
       _subjectSetsTimerDisplay.sink.add("1");
       _updateTotalTime();

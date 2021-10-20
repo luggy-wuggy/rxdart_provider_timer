@@ -7,6 +7,24 @@ TextStyle kTitleStyle = GoogleFonts.roboto(
   fontWeight: FontWeight.w700,
 );
 
+TextStyle kSubTitleStyle = GoogleFonts.roboto(
+  fontSize: 34,
+  color: Colors.white,
+  fontWeight: FontWeight.w700,
+);
+
+TextStyle kHeaderStyle = GoogleFonts.roboto(
+  fontSize: 24,
+  color: Colors.grey[600],
+  fontWeight: FontWeight.w600,
+);
+
+TextStyle kSubHeaderStyle = GoogleFonts.roboto(
+  fontSize: 22,
+  color: Colors.white,
+  fontWeight: FontWeight.w600,
+);
+
 TextStyle kSubTitleTabStyle = GoogleFonts.roboto(
   color: Colors.grey[600],
   fontWeight: FontWeight.w600,
