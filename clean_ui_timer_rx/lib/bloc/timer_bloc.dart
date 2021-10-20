@@ -12,6 +12,8 @@ class TimerBloc {
   late BehaviorSubject<String> _subjectTotalTimeDisplay;
   late BehaviorSubject<String> _subjectSetsSettingDisplay;
   late BehaviorSubject<String> _subjectSetsTimerDisplay;
+  late BehaviorSubject<String> _subjectRoundWarningDisplay;
+  late BehaviorSubject<String> _subjectBreakWarningDisplay;
 
   late BehaviorSubject<bool> _subjectTimerIsPlaying;
   late BehaviorSubject<bool> _subjectTimerIsRound;
@@ -23,6 +25,8 @@ class TimerBloc {
   String initialSetsSettingDisplay = "12";
   String initialTotalTimeDisplay = "48:00";
   String initialSetsTimerDisplay = "1";
+  String initialRoundWarningDisplay = '0:10';
+  String initialBreakWarningDisplay = '0:10';
 
   TimerBloc() {
     _subjectTimeDisplay = BehaviorSubject<String>.seeded(initialTimeDisplay);
@@ -36,6 +40,10 @@ class TimerBloc {
         BehaviorSubject<String>.seeded(initialSetsSettingDisplay);
     _subjectSetsTimerDisplay =
         BehaviorSubject<String>.seeded(initialSetsTimerDisplay);
+    _subjectRoundWarningDisplay =
+        BehaviorSubject<String>.seeded(initialRoundWarningDisplay);
+    _subjectBreakWarningDisplay =
+        BehaviorSubject<String>.seeded(initialBreakWarningDisplay);
     _subjectTimerIsPlaying = BehaviorSubject<bool>.seeded(false);
     _subjectTimerIsRound = BehaviorSubject<bool>.seeded(false);
     _subjectTimerStarted = BehaviorSubject<bool>.seeded(false);
@@ -47,6 +55,11 @@ class TimerBloc {
   Stream<String> get totalTimeObservable => _subjectTotalTimeDisplay.stream;
   Stream<String> get setSettingObservable => _subjectSetsSettingDisplay.stream;
   Stream<String> get setsTimerObservable => _subjectSetsTimerDisplay.stream;
+  Stream<String> get roundWarningObservable =>
+      _subjectRoundWarningDisplay.stream;
+  Stream<String> get breakWarningObservable =>
+      _subjectBreakWarningDisplay.stream;
+
   Stream<bool> get isPlayingObservable => _subjectTimerIsPlaying.stream;
   Stream<bool> get isTimerRoundObservable => _subjectTimerIsRound.stream;
   Stream<bool> get isTimerStartedObservable => _subjectTimerStarted.stream;
@@ -95,6 +108,14 @@ class TimerBloc {
         _subjectSetsTimerDisplay.value != "1") {
       _subjectTimeDisplay.sink.add(_subjectBreakTimeDisplay.value);
     }
+  }
+
+  void setRoundWarning(String s) {
+    _subjectRoundWarningDisplay.value = s;
+  }
+
+  void setBreakWarning(String s) {
+    _subjectBreakWarningDisplay.value = s;
   }
 
   void setSet(String s) {
@@ -152,13 +173,12 @@ class TimerBloc {
   Future<void> _elapseTime() async {
     await _toggleRoundBreak();
 
-    if (_subjectTimeDisplay.value == "0:10" && _subjectTimerIsRound.value) {
+    if (_subjectTimeDisplay.value == _subjectRoundWarningDisplay.value &&
+        _subjectTimerIsRound.value) {
       audioTimer.playWarning();
-      print('10 SECS ROUND WARNING');
-    } else if (_subjectTimeDisplay.value == "0:05" &&
+    } else if (_subjectTimeDisplay.value == _subjectBreakWarningDisplay.value &&
         !_subjectTimerIsRound.value) {
       audioTimer.playWarning();
-      print('5 SECONDS BREAK WARNING');
     }
 
     Duration displayTime = Duration(
@@ -252,5 +272,7 @@ class TimerBloc {
     _subjectTotalTimeDisplay.close();
     _subjectSetsSettingDisplay.close();
     _subjectSetsTimerDisplay.close();
+    _subjectRoundWarningDisplay.close();
+    _subjectBreakWarningDisplay.close();
   }
 }

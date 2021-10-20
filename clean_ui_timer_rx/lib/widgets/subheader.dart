@@ -33,12 +33,12 @@ class _SubHeaderWidgetState extends State<SubHeaderWidget> {
     _timerBloc = Provider.of<TimerBloc>(context);
 
     return StreamBuilder<Object>(
-      stream: _timerBloc.isPlayingObservable,
+      stream: _timerBloc.isTimerStartedObservable,
       builder: (context, snapshot) {
-        bool isPlaying = snapshot.hasData ? snapshot.data as bool : false;
+        bool isStarted = snapshot.hasData ? snapshot.data as bool : false;
 
         return IgnorePointer(
-          ignoring: isPlaying,
+          ignoring: isStarted,
           child: SizedBox(
             height: 85,
             child: Row(
