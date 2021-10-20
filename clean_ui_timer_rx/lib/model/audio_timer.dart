@@ -6,9 +6,14 @@ class AudioTimer {
   AudioTimer() {
     player.loadAll([
       'start_timer_sx.mp3',
+      'warning_sx.mp3',
       'start_round_sx.wav',
       'end_round_sx.wav',
     ]);
+  }
+
+  playWarning() async {
+    player.play('warning_sx.mp3');
   }
 
   playStartTimer() async {

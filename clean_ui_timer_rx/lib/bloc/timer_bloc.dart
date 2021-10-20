@@ -152,6 +152,15 @@ class TimerBloc {
   Future<void> _elapseTime() async {
     await _toggleRoundBreak();
 
+    if (_subjectTimeDisplay.value == "0:10" && _subjectTimerIsRound.value) {
+      audioTimer.playWarning();
+      print('10 SECS ROUND WARNING');
+    } else if (_subjectTimeDisplay.value == "0:05" &&
+        !_subjectTimerIsRound.value) {
+      audioTimer.playWarning();
+      print('5 SECONDS BREAK WARNING');
+    }
+
     Duration displayTime = Duration(
             minutes: int.parse(_subjectTimeDisplay.value.split(":")[0]),
             seconds: int.parse(_subjectTimeDisplay.value.split(":")[1])) -
