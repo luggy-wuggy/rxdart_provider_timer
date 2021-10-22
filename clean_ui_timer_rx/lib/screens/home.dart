@@ -1,12 +1,9 @@
-import 'package:clean_ui_timer_rx/bloc/timer_bloc.dart';
-import 'package:clean_ui_timer_rx/global/text_style.dart';
 import 'package:clean_ui_timer_rx/widgets/bottom_bar.dart';
 import 'package:clean_ui_timer_rx/widgets/header.dart';
 import 'package:clean_ui_timer_rx/widgets/subheader.dart';
 import 'package:clean_ui_timer_rx/widgets/timer.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:provider/provider.dart';
 
 class Home extends StatefulWidget {
   const Home({Key? key}) : super(key: key);

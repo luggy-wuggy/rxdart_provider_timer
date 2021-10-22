@@ -86,13 +86,13 @@ class _HeaderWidgetState extends State<HeaderWidget> {
                                         'Settings',
                                         style: kSubTitleStyle,
                                       ),
-                                      Spacer(),
+                                      const Spacer(),
                                     ],
                                   ),
                                   const SizedBox(
                                     height: 25,
                                   ),
-                                  StreamBuilder<Object>(
+                                  StreamBuilder<String>(
                                       stream: _timerBloc.roundWarningObservable,
                                       builder: (context, snapshot) {
                                         _roundWarningScrollController = FixedExtentScrollController(initialItem: warningList.indexOf("${snapshot.data}"));
@@ -125,10 +125,7 @@ class _HeaderWidgetState extends State<HeaderWidget> {
                                                             itemExtent: 40,
                                                             onSelectedItemChanged: (int index) {},
                                                             children: warningList.map((e) {
-                                                              return Text(
-                                                                e,
-                                                                style: kTitleTabStyle,
-                                                              );
+                                                              return Text(e, style: kTitleTabStyle);
                                                             }).toList(),
                                                           ),
                                                         ),
@@ -136,7 +133,6 @@ class _HeaderWidgetState extends State<HeaderWidget> {
                                                         GestureDetector(
                                                           onTap: () {
                                                             Navigator.pop(context);
-
                                                             _timerBloc.setRoundWarning(warningList[_roundWarningScrollController.selectedItem]);
                                                           },
                                                           child: Container(
@@ -203,7 +199,6 @@ class _HeaderWidgetState extends State<HeaderWidget> {
                                     stream: _timerBloc.breakWarningObservable,
                                     builder: (context, snapshot) {
                                       _breakWarningScrollController = FixedExtentScrollController(initialItem: warningList.indexOf("${snapshot.data}"));
-
                                       return GestureDetector(
                                         onTap: () {
                                           showModalBottomSheet(

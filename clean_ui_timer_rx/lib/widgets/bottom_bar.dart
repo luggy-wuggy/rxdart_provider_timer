@@ -5,7 +5,7 @@ import 'package:provider/provider.dart';
 
 // ignore: must_be_immutable
 class BottomBarWidget extends StatefulWidget {
-  BottomBarWidget({Key? key}) : super(key: key);
+  const BottomBarWidget({Key? key}) : super(key: key);
 
   @override
   State<BottomBarWidget> createState() => _BottomBarWidgetState();
@@ -58,51 +58,52 @@ class _BottomBarWidgetState extends State<BottomBarWidget> {
               isPlaying = snapshot.hasData ? snapshot.data as bool : false;
 
               return StreamBuilder<Object>(
-                  stream: _timerBloc.isTimerStartedObservable,
-                  builder: (context, started) {
-                    bool isStarted = started.hasData ? started.data as bool : false;
+                stream: _timerBloc.isTimerStartedObservable,
+                builder: (context, started) {
+                  bool isStarted = started.hasData ? started.data as bool : false;
 
-                    return GestureDetector(
-                      onTap: () {
-                        isPlaying
-                            ? _timerBloc.pauseTimer()
-                            : isStarted
-                                ? _timerBloc.resumeTimer()
-                                : _timerBloc.startTimer();
-                      },
-                      child: AnimatedContainer(
-                        duration: const Duration(milliseconds: 400),
-                        height: 120,
-                        width: 120,
-                        decoration: BoxDecoration(
-                          boxShadow: [
-                            !isPlaying
-                                ? BoxShadow(
-                                    color: Colors.blueGrey[800] as Color,
-                                    blurRadius: 35,
-                                    blurStyle: BlurStyle.normal,
-                                    offset: const Offset(0, 3),
-                                  )
-                                : const BoxShadow(),
+                  return GestureDetector(
+                    onTap: () {
+                      isPlaying
+                          ? _timerBloc.pauseTimer()
+                          : isStarted
+                              ? _timerBloc.resumeTimer()
+                              : _timerBloc.startTimer();
+                    },
+                    child: AnimatedContainer(
+                      duration: const Duration(milliseconds: 400),
+                      height: 120,
+                      width: 120,
+                      decoration: BoxDecoration(
+                        boxShadow: [
+                          !isPlaying
+                              ? BoxShadow(
+                                  color: Colors.blueGrey[800] as Color,
+                                  blurRadius: 35,
+                                  blurStyle: BlurStyle.normal,
+                                  offset: const Offset(0, 3),
+                                )
+                              : const BoxShadow(),
+                        ],
+                        shape: BoxShape.circle,
+                        gradient: LinearGradient(
+                          colors: <Color>[
+                            !isPlaying ? Colors.green[700] as Color : Colors.grey[800] as Color,
+                            !isPlaying ? Colors.green[200] as Color : Colors.grey[800] as Color,
                           ],
-                          shape: BoxShape.circle,
-                          gradient: LinearGradient(
-                            colors: <Color>[
-                              !isPlaying ? Colors.green[700] as Color : Colors.grey[800] as Color,
-                              !isPlaying ? Colors.green[200] as Color : Colors.grey[800] as Color,
-                            ],
-                            begin: Alignment.bottomLeft,
-                            end: Alignment.topRight,
-                          ),
-                        ),
-                        child: Icon(
-                          isPlaying ? Icons.pause_rounded : Icons.play_arrow_rounded,
-                          color: Colors.white,
-                          size: 60,
+                          begin: Alignment.bottomLeft,
+                          end: Alignment.topRight,
                         ),
                       ),
-                    );
-                  });
+                      child: Icon(
+                        isPlaying ? Icons.pause_rounded : Icons.play_arrow_rounded,
+                        color: Colors.white,
+                        size: 60,
+                      ),
+                    ),
+                  );
+                },
+              );
             },
           ),
           GestureDetector(
