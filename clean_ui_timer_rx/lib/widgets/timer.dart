@@ -1,3 +1,4 @@
+import 'package:clean_ui_timer_rx/bloc/preference_bloc.dart';
 import 'package:clean_ui_timer_rx/bloc/timer_bloc.dart';
 import 'package:clean_ui_timer_rx/global/text_style.dart';
 import 'package:flutter/material.dart';
@@ -14,7 +15,7 @@ class TimerWidget extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    _timerBloc = Provider.of<TimerBloc>(context);
+    _timerBloc = Provider.of<TimerProvider>(context).bloc;
 
     return StreamBuilder<Object>(
       stream: _timerBloc.isPlayingObservable,
@@ -29,8 +30,7 @@ class TimerWidget extends StatelessWidget {
             return StreamBuilder<Object>(
                 stream: _timerBloc.isTimerStartedObservable,
                 builder: (context, snapshot) {
-                  bool isStarted =
-                      snapshot.hasData ? snapshot.data as bool : false;
+                  bool isStarted = snapshot.hasData ? snapshot.data as bool : false;
 
                   return AnimatedContainer(
                     duration: const Duration(milliseconds: 400),
@@ -77,7 +77,7 @@ class TimerWidget extends StatelessWidget {
                       mainAxisAlignment: MainAxisAlignment.center,
                       children: [
                         StreamBuilder<Object>(
-                          stream: _timerBloc.setsTimerObservable,
+                          stream: _timerBloc.setTimerObservable,
                           builder: (context, snapshot) {
                             return Text(
                               'Set ${snapshot.data}',

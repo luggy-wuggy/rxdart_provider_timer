@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
 import 'package:clean_ui_timer_rx/screens/home.dart';
-import 'package:clean_ui_timer_rx/bloc/timer_bloc.dart';
+import 'bloc/preference_bloc.dart';
 
 void main() {
   runApp(const MyApp());
@@ -13,8 +13,8 @@ class MyApp extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Provider(
-      create: (context) => TimerBloc(),
+    return ChangeNotifierProvider<TimerProvider>(
+      create: (context) => TimerProvider(),
       child: const MaterialApp(
         home: Home(),
       ),

@@ -1,3 +1,4 @@
+import 'package:clean_ui_timer_rx/bloc/preference_bloc.dart';
 import 'package:clean_ui_timer_rx/bloc/timer_bloc.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
@@ -22,7 +23,7 @@ class _BottomBarWidgetState extends State<BottomBarWidget> {
 
   @override
   Widget build(BuildContext context) {
-    _timerBloc = Provider.of<TimerBloc>(context);
+    _timerBloc = Provider.of<TimerProvider>(context).bloc;
 
     return SizedBox(
       height: 85,
@@ -59,8 +60,7 @@ class _BottomBarWidgetState extends State<BottomBarWidget> {
               return StreamBuilder<Object>(
                   stream: _timerBloc.isTimerStartedObservable,
                   builder: (context, started) {
-                    bool isStarted =
-                        started.hasData ? started.data as bool : false;
+                    bool isStarted = started.hasData ? started.data as bool : false;
 
                     return GestureDetector(
                       onTap: () {
@@ -88,21 +88,15 @@ class _BottomBarWidgetState extends State<BottomBarWidget> {
                           shape: BoxShape.circle,
                           gradient: LinearGradient(
                             colors: <Color>[
-                              !isPlaying
-                                  ? Colors.green[700] as Color
-                                  : Colors.grey[800] as Color,
-                              !isPlaying
-                                  ? Colors.green[200] as Color
-                                  : Colors.grey[800] as Color,
+                              !isPlaying ? Colors.green[700] as Color : Colors.grey[800] as Color,
+                              !isPlaying ? Colors.green[200] as Color : Colors.grey[800] as Color,
                             ],
                             begin: Alignment.bottomLeft,
                             end: Alignment.topRight,
                           ),
                         ),
                         child: Icon(
-                          isPlaying
-                              ? Icons.pause_rounded
-                              : Icons.play_arrow_rounded,
+                          isPlaying ? Icons.pause_rounded : Icons.play_arrow_rounded,
                           color: Colors.white,
                           size: 60,
                         ),

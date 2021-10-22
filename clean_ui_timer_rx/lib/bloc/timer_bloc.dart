@@ -7,72 +7,63 @@ import 'package:shared_preferences/shared_preferences.dart';
 class TimerBloc {
   final Stopwatch _timer = Stopwatch();
   final AudioTimer _audioTimer = AudioTimer();
-
-  late BehaviorSubject<String> _subjectTimeDisplay;
-  late BehaviorSubject<String> _subjectRoundTimeDisplay;
-  late BehaviorSubject<String> _subjectBreakTimeDisplay;
-  late BehaviorSubject<String> _subjectTotalTimeDisplay;
-  late BehaviorSubject<String> _subjectSetsSettingDisplay;
-  late BehaviorSubject<String> _subjectSetsTimerDisplay;
-  late BehaviorSubject<String> _subjectRoundWarningDisplay;
-  late BehaviorSubject<String> _subjectBreakWarningDisplay;
-
-  late BehaviorSubject<bool> _subjectTimerIsPlaying;
-  late BehaviorSubject<bool> _subjectTimerIsRound;
-  late BehaviorSubject<bool> _subjectTimerStarted;
-
   String initialTimeDisplay = "3:00";
   String initialRoundTimeDisplay = "3:00";
   String initialBreakTimeDisplay = "1:00";
-  String initialSetsSettingDisplay = "12";
+  String initialSetSettingDisplay = "12";
   String initialTotalTimeDisplay = "48:00";
-  String initialSetsTimerDisplay = "1";
   String initialRoundWarningDisplay = '0:10';
   String initialBreakWarningDisplay = '0:10';
 
-  TimerBloc() {
-    _subjectTimeDisplay = BehaviorSubject<String>.seeded(initialTimeDisplay);
+  final _subjectTimeDisplay = BehaviorSubject<String>();
+  final _subjectRoundTimeDisplay = BehaviorSubject<String>();
+  final _subjectBreakTimeDisplay = BehaviorSubject<String>();
+  final _subjectTotalTimeDisplay = BehaviorSubject<String>();
+  final _subjectSetSettingDisplay = BehaviorSubject<String>();
+  final _subjectRoundWarningDisplay = BehaviorSubject<String>();
+  final _subjectBreakWarningDisplay = BehaviorSubject<String>();
 
-    _subjectRoundTimeDisplay = BehaviorSubject<String>.seeded(initialRoundTimeDisplay);
+  final _subjectSetTimerDisplay = BehaviorSubject<String>.seeded('1');
+  final _subjectTimerIsPlaying = BehaviorSubject<bool>.seeded(false);
+  final _subjectTimerIsRound = BehaviorSubject<bool>.seeded(false);
+  final _subjectTimerStarted = BehaviorSubject<bool>.seeded(false);
 
-    _subjectBreakTimeDisplay = BehaviorSubject<String>.seeded(initialBreakTimeDisplay);
-
-    _subjectTotalTimeDisplay = BehaviorSubject<String>.seeded(initialTotalTimeDisplay);
-
-    _subjectSetsSettingDisplay = BehaviorSubject<String>.seeded(initialSetsSettingDisplay);
-
-    _subjectRoundWarningDisplay = BehaviorSubject<String>.seeded(initialRoundWarningDisplay);
-
-    _subjectBreakWarningDisplay = BehaviorSubject<String>.seeded(initialBreakWarningDisplay);
-
-    _subjectSetsTimerDisplay = BehaviorSubject<String>.seeded(initialSetsTimerDisplay);
-
-    _subjectTimerIsPlaying = BehaviorSubject<bool>.seeded(false);
-    _subjectTimerIsRound = BehaviorSubject<bool>.seeded(false);
-    _subjectTimerStarted = BehaviorSubject<bool>.seeded(false);
-  }
-
+  /// GETTERS
   Stream<String> get timeObservable => _subjectTimeDisplay.stream;
   Stream<String> get roundTimeObservable => _subjectRoundTimeDisplay.stream;
   Stream<String> get breakTimeObservable => _subjectBreakTimeDisplay.stream;
   Stream<String> get totalTimeObservable => _subjectTotalTimeDisplay.stream;
-  Stream<String> get setSettingObservable => _subjectSetsSettingDisplay.stream;
-  Stream<String> get setsTimerObservable => _subjectSetsTimerDisplay.stream;
+  Stream<String> get setSettingObservable => _subjectSetSettingDisplay.stream;
+  Stream<String> get setTimerObservable => _subjectSetTimerDisplay.stream;
   Stream<String> get roundWarningObservable => _subjectRoundWarningDisplay.stream;
   Stream<String> get breakWarningObservable => _subjectBreakWarningDisplay.stream;
-
   Stream<bool> get isPlayingObservable => _subjectTimerIsPlaying.stream;
   Stream<bool> get isTimerRoundObservable => _subjectTimerIsRound.stream;
   Stream<bool> get isTimerStartedObservable => _subjectTimerStarted.stream;
 
-  void _initilizeSharedPreferences() async {
-    final pref = await SharedPreferences.getInstance();
+  void loadPreferences() async {
+    SharedPreferences prefs = await SharedPreferences.getInstance();
+    String? timer = prefs.getString('timer');
+    String? roundTime = prefs.getString('round_time');
+    String? breakTime = prefs.getString('break_time');
+    String? totalTime = prefs.getString('total_time');
+    String? setSetting = prefs.getString('set_setting');
+    String? roundWarning = prefs.getString('round_warning');
+    String? breakWarning = prefs.getString('break_warning');
+
+    timer != null ? _subjectTimeDisplay.sink.add(timer) : _subjectTimeDisplay.sink.add(initialTimeDisplay);
+    roundTime != null ? _subjectRoundTimeDisplay.sink.add(roundTime) : _subjectRoundTimeDisplay.sink.add(initialRoundTimeDisplay);
+    breakTime != null ? _subjectBreakTimeDisplay.sink.add(breakTime) : _subjectBreakTimeDisplay.sink.add(initialBreakTimeDisplay);
+    totalTime != null ? _subjectTotalTimeDisplay.sink.add(totalTime) : _subjectTotalTimeDisplay.sink.add(initialTotalTimeDisplay);
+    setSetting != null ? _subjectSetSettingDisplay.sink.add(setSetting) : _subjectSetSettingDisplay.sink.add(initialSetSettingDisplay);
+    roundWarning != null ? _subjectRoundWarningDisplay.sink.add(roundWarning) : _subjectRoundWarningDisplay.sink.add(initialRoundWarningDisplay);
+    breakWarning != null ? _subjectBreakWarningDisplay.sink.add(breakWarning) : _subjectBreakWarningDisplay.sink.add(initialBreakWarningDisplay);
   }
 
   void startTimer() {
     _audioTimer.playStartTimer();
     _subjectTimerIsPlaying.value = true;
-    _subjectTimerIsRound.sink.add(true);
+    _subjectTimerIsRound.value = true;
     _subjectTimerStarted.value = true;
     _timer.start();
     _startTimer();
@@ -93,7 +84,7 @@ class TimerBloc {
 
     Future.delayed(const Duration(milliseconds: 1000), () {
       _subjectTimeDisplay.sink.add(_subjectRoundTimeDisplay.value);
-      _subjectSetsTimerDisplay.sink.add("1");
+      _subjectSetTimerDisplay.sink.add("1");
       _updateTotalTime();
     });
   }
@@ -109,33 +100,44 @@ class TimerBloc {
 
     if (_subjectTimerIsRound.value) {
       _subjectTimeDisplay.sink.add(_subjectRoundTimeDisplay.value);
-    } else if (!_subjectTimerIsRound.value && _subjectSetsTimerDisplay.value != "1") {
+    } else if (!_subjectTimerIsRound.value && _subjectSetTimerDisplay.value != "1") {
       _subjectTimeDisplay.sink.add(_subjectBreakTimeDisplay.value);
     }
   }
 
-  void setRoundWarning(String s) {
+  void setRoundWarning(String s) async {
     _subjectRoundWarningDisplay.value = s;
+    SharedPreferences prefs = await SharedPreferences.getInstance();
+    await prefs.setString('round_warning', s);
   }
 
-  void setBreakWarning(String s) {
+  void setBreakWarning(String s) async {
     _subjectBreakWarningDisplay.value = s;
+    SharedPreferences prefs = await SharedPreferences.getInstance();
+    await prefs.setString('break_warning', s);
   }
 
   void setSet(String s) async {
-    _subjectSetsSettingDisplay.value = s;
+    _subjectSetSettingDisplay.value = s;
     _updateTotalTime();
+    SharedPreferences prefs = await SharedPreferences.getInstance();
+    await prefs.setString('set_setting', s);
   }
 
   void setRoundTime(String s) async {
     _subjectRoundTimeDisplay.value = s;
     _subjectTimeDisplay.value = s;
+    SharedPreferences prefs = await SharedPreferences.getInstance();
+    await prefs.setString('round_time', s);
+    await prefs.setString('timer', s);
 
     _updateTotalTime();
   }
 
   void setBreakTime(String s) async {
     _subjectBreakTimeDisplay.value = s;
+    SharedPreferences prefs = await SharedPreferences.getInstance();
+    await prefs.setString('break_time', s);
 
     _updateTotalTime();
   }
@@ -167,7 +169,7 @@ class TimerBloc {
     else {
       if (_subjectTimeDisplay.value == '0:00') {
         _audioTimer.playRoundStart();
-        _subjectSetsTimerDisplay.sink.add((int.parse(_subjectSetsTimerDisplay.value) + 1).toString());
+        _subjectSetTimerDisplay.sink.add((int.parse(_subjectSetTimerDisplay.value) + 1).toString());
         _subjectTimerIsRound.sink.add(!_subjectTimerIsRound.value);
         _subjectTimeDisplay.sink.add(_subjectRoundTimeDisplay.value);
         await Future.delayed(const Duration(seconds: 1));
@@ -221,10 +223,12 @@ class TimerBloc {
     }
 
     _subjectTotalTimeDisplay.sink.add(stringTotalTime);
+    SharedPreferences prefs = await SharedPreferences.getInstance();
+    await prefs.setString('total_time', stringTotalTime);
   }
 
-  void _updateTotalTime() {
-    int set = int.parse(_subjectSetsSettingDisplay.value);
+  void _updateTotalTime() async {
+    int set = int.parse(_subjectSetSettingDisplay.value);
     Duration roundTime = Duration(minutes: int.parse(_subjectRoundTimeDisplay.value.split(":")[0]), seconds: int.parse(_subjectRoundTimeDisplay.value.split(":")[1]));
 
     Duration breakTime = Duration(minutes: int.parse(_subjectBreakTimeDisplay.value.split(":")[0]), seconds: int.parse(_subjectBreakTimeDisplay.value.split(":")[1]));
@@ -239,6 +243,8 @@ class TimerBloc {
     }
 
     _subjectTotalTimeDisplay.sink.add(stringTotalTime);
+    SharedPreferences prefs = await SharedPreferences.getInstance();
+    await prefs.setString('total_time', stringTotalTime);
   }
 
   void dispose() {
@@ -246,9 +252,12 @@ class TimerBloc {
     _subjectRoundTimeDisplay.close();
     _subjectBreakTimeDisplay.close();
     _subjectTotalTimeDisplay.close();
-    _subjectSetsSettingDisplay.close();
-    _subjectSetsTimerDisplay.close();
+    _subjectSetSettingDisplay.close();
+    _subjectSetTimerDisplay.close();
     _subjectRoundWarningDisplay.close();
     _subjectBreakWarningDisplay.close();
+    _subjectTimerIsPlaying.close();
+    _subjectTimerIsRound.close();
+    _subjectTimerStarted.close();
   }
 }

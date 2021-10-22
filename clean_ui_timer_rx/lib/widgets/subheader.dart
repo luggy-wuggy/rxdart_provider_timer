@@ -1,3 +1,4 @@
+import 'package:clean_ui_timer_rx/bloc/preference_bloc.dart';
 import 'package:clean_ui_timer_rx/bloc/timer_bloc.dart';
 import 'package:clean_ui_timer_rx/global/text_style.dart';
 import 'package:clean_ui_timer_rx/model/timer_settings.dart';
@@ -30,7 +31,7 @@ class _SubHeaderWidgetState extends State<SubHeaderWidget> {
 
   @override
   Widget build(BuildContext context) {
-    _timerBloc = Provider.of<TimerBloc>(context);
+    _timerBloc = Provider.of<TimerProvider>(context).bloc;
 
     return StreamBuilder<Object>(
       stream: _timerBloc.isTimerStartedObservable,
@@ -49,9 +50,7 @@ class _SubHeaderWidgetState extends State<SubHeaderWidget> {
                     builder: (context, snapshot) {
                       return GestureDetector(
                         onTap: () async {
-                          _setsScrollController = FixedExtentScrollController(
-                              initialItem:
-                                  setsList.indexOf("${snapshot.data}"));
+                          _setsScrollController = FixedExtentScrollController(initialItem: setsList.indexOf("${snapshot.data}"));
 
                           await showModalBottomSheet(
                             backgroundColor: Colors.transparent,
@@ -75,8 +74,7 @@ class _SubHeaderWidgetState extends State<SubHeaderWidget> {
                                       SizedBox(
                                         height: 220,
                                         child: CupertinoPicker(
-                                          scrollController:
-                                              _setsScrollController,
+                                          scrollController: _setsScrollController,
                                           itemExtent: 40,
                                           onSelectedItemChanged: (int index) {},
                                           children: setsList.map((e) {
@@ -91,16 +89,13 @@ class _SubHeaderWidgetState extends State<SubHeaderWidget> {
                                       GestureDetector(
                                         onTap: () {
                                           Navigator.pop(context);
-                                          _timerBloc.setSet(setsList[
-                                              _setsScrollController
-                                                  .selectedItem]);
+                                          _timerBloc.setSet(setsList[_setsScrollController.selectedItem]);
                                         },
                                         child: Container(
                                           height: 55,
                                           width: 120,
                                           decoration: BoxDecoration(
-                                              borderRadius:
-                                                  const BorderRadius.all(
+                                              borderRadius: const BorderRadius.all(
                                                 Radius.circular(17),
                                               ),
                                               gradient: LinearGradient(
@@ -113,8 +108,7 @@ class _SubHeaderWidgetState extends State<SubHeaderWidget> {
                                               ),
                                               boxShadow: [
                                                 BoxShadow(
-                                                  color: Colors.blueGrey[900]
-                                                      as Color,
+                                                  color: Colors.blueGrey[900] as Color,
                                                   blurRadius: 10,
                                                   blurStyle: BlurStyle.normal,
                                                   offset: const Offset(0, 2),
@@ -181,15 +175,12 @@ class _SubHeaderWidgetState extends State<SubHeaderWidget> {
                                       alignment: Alignment.center,
                                       child: CupertinoTheme(
                                         data: CupertinoThemeData(
-                                          textTheme: CupertinoTextThemeData(
-                                              pickerTextStyle: kTitleTabStyle),
+                                          textTheme: CupertinoTextThemeData(pickerTextStyle: kTitleTabStyle),
                                         ),
                                         child: CupertinoTimerPicker(
                                           initialTimerDuration: Duration(
-                                            minutes: int.parse(
-                                                roundStringTime.split(":")[0]),
-                                            seconds: int.parse(
-                                                roundStringTime.split(":")[1]),
+                                            minutes: int.parse(roundStringTime.split(":")[0]),
+                                            seconds: int.parse(roundStringTime.split(":")[1]),
                                           ),
                                           alignment: Alignment.bottomCenter,
                                           onTimerDurationChanged: (Duration d) {
@@ -203,18 +194,15 @@ class _SubHeaderWidgetState extends State<SubHeaderWidget> {
                                     GestureDetector(
                                       onTap: () {
                                         Navigator.pop(context);
-                                        roundStringTime =
-                                            "${(roundDurationTime.inMinutes % 60).toString()}:${(roundDurationTime.inSeconds % 60).toString().padLeft(2, '0')}";
+                                        roundStringTime = "${(roundDurationTime.inMinutes % 60).toString()}:${(roundDurationTime.inSeconds % 60).toString().padLeft(2, '0')}";
 
-                                        _timerBloc
-                                            .setRoundTime(roundStringTime);
+                                        _timerBloc.setRoundTime(roundStringTime);
                                       },
                                       child: Container(
                                         height: 55,
                                         width: 120,
                                         decoration: BoxDecoration(
-                                            borderRadius:
-                                                const BorderRadius.all(
+                                            borderRadius: const BorderRadius.all(
                                               Radius.circular(17),
                                             ),
                                             gradient: LinearGradient(
@@ -227,8 +215,7 @@ class _SubHeaderWidgetState extends State<SubHeaderWidget> {
                                             ),
                                             boxShadow: [
                                               BoxShadow(
-                                                color: Colors.blueGrey[900]
-                                                    as Color,
+                                                color: Colors.blueGrey[900] as Color,
                                                 blurRadius: 10,
                                                 blurStyle: BlurStyle.normal,
                                                 offset: const Offset(0, 2),
@@ -296,20 +283,15 @@ class _SubHeaderWidgetState extends State<SubHeaderWidget> {
                                         alignment: Alignment.center,
                                         child: CupertinoTheme(
                                           data: CupertinoThemeData(
-                                            textTheme: CupertinoTextThemeData(
-                                                pickerTextStyle:
-                                                    kTitleTabStyle),
+                                            textTheme: CupertinoTextThemeData(pickerTextStyle: kTitleTabStyle),
                                           ),
                                           child: CupertinoTimerPicker(
                                             initialTimerDuration: Duration(
-                                              minutes: int.parse(breakStringTime
-                                                  .split(":")[0]),
-                                              seconds: int.parse(breakStringTime
-                                                  .split(":")[1]),
+                                              minutes: int.parse(breakStringTime.split(":")[0]),
+                                              seconds: int.parse(breakStringTime.split(":")[1]),
                                             ),
                                             alignment: Alignment.bottomCenter,
-                                            onTimerDurationChanged:
-                                                (Duration d) {
+                                            onTimerDurationChanged: (Duration d) {
                                               breakDurationTime = d;
                                             },
                                             mode: CupertinoTimerPickerMode.ms,
@@ -320,18 +302,15 @@ class _SubHeaderWidgetState extends State<SubHeaderWidget> {
                                       GestureDetector(
                                         onTap: () {
                                           Navigator.pop(context);
-                                          breakStringTime =
-                                              "${(breakDurationTime.inMinutes % 60).toString()}:${(breakDurationTime.inSeconds % 60).toString().padLeft(2, '0')}";
+                                          breakStringTime = "${(breakDurationTime.inMinutes % 60).toString()}:${(breakDurationTime.inSeconds % 60).toString().padLeft(2, '0')}";
 
-                                          _timerBloc
-                                              .setBreakTime(breakStringTime);
+                                          _timerBloc.setBreakTime(breakStringTime);
                                         },
                                         child: Container(
                                           height: 55,
                                           width: 120,
                                           decoration: BoxDecoration(
-                                              borderRadius:
-                                                  const BorderRadius.all(
+                                              borderRadius: const BorderRadius.all(
                                                 Radius.circular(17),
                                               ),
                                               gradient: LinearGradient(
@@ -344,8 +323,7 @@ class _SubHeaderWidgetState extends State<SubHeaderWidget> {
                                               ),
                                               boxShadow: [
                                                 BoxShadow(
-                                                  color: Colors.blueGrey[900]
-                                                      as Color,
+                                                  color: Colors.blueGrey[900] as Color,
                                                   blurRadius: 10,
                                                   blurStyle: BlurStyle.normal,
                                                   offset: const Offset(0, 2),

@@ -16,18 +16,13 @@ class Home extends StatefulWidget {
 }
 
 class _HomeState extends State<Home> {
-  late TimerBloc _timerBloc;
-
   @override
   void dispose() {
     super.dispose();
-    _timerBloc.dispose();
   }
 
   @override
   Widget build(BuildContext context) {
-    _timerBloc = Provider.of<TimerBloc>(context);
-
     return Scaffold(
       body: Container(
         color: Colors.black,
