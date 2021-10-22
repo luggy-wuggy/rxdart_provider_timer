@@ -1,4 +1,4 @@
-import 'package:clean_ui_timer_rx/bloc/preference_bloc.dart';
+import 'package:clean_ui_timer_rx/bloc/timer_provider.dart';
 import 'package:clean_ui_timer_rx/bloc/timer_bloc.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';

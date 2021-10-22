@@ -1,6 +1,6 @@
 import 'dart:async';
 import 'package:clean_ui_timer_rx/model/audio_timer.dart';
-import 'package:clean_ui_timer_rx/bloc/preference_bloc.dart';
+import 'package:clean_ui_timer_rx/bloc/timer_provider.dart';
 import 'package:rxdart/rxdart.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 

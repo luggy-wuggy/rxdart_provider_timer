@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
 import 'package:clean_ui_timer_rx/screens/home.dart';
-import 'bloc/preference_bloc.dart';
+import 'bloc/timer_provider.dart';
 
 void main() {
   runApp(const MyApp());
