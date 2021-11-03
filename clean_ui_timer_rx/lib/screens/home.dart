@@ -19,6 +19,7 @@ class _HomeState extends State<Home> {
   bool _isBottomBannerAdLoaded = false;
 
   void _createBottomBannerAd() {
+    print('create banner');
     _bottomBannerAd = BannerAd(
       adUnitId: AdHelper.bannerAdUnitId,
       size: AdSize.banner,
@@ -30,6 +31,8 @@ class _HomeState extends State<Home> {
           });
         },
         onAdFailedToLoad: (ad, error) {
+          print(error);
+          print('failed to load');
           ad.dispose();
         },
       ),
@@ -67,7 +70,7 @@ class _HomeState extends State<Home> {
             const Spacer(),
             TimerWidget(),
             const Spacer(),
-            BottomBarWidget(),
+            const BottomBarWidget(),
           ],
         ),
       ),
@@ -77,7 +80,11 @@ class _HomeState extends State<Home> {
               width: _bottomBannerAd.size.width.toDouble(),
               child: AdWidget(ad: _bottomBannerAd),
             )
-          : null,
+          : Container(
+              height: _bottomBannerAd.size.height.toDouble(),
+              width: _bottomBannerAd.size.width.toDouble(),
+              color: Colors.black,
+            ),
     );
   }
 }

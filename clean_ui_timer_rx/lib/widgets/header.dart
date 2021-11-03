@@ -68,7 +68,7 @@ class _HeaderWidgetState extends State<HeaderWidget> {
                           builder: (BuildContext context) {
                             return Container(
                               padding: const EdgeInsets.symmetric(horizontal: 30, vertical: 30),
-                              height: MediaQuery.of(context).size.height * 0.35,
+                              height: MediaQuery.of(context).size.height * 0.4,
                               decoration: const BoxDecoration(
                                 color: Color.fromRGBO(12, 13, 12, 1),
                                 borderRadius: BorderRadius.only(

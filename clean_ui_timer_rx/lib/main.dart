@@ -19,6 +19,7 @@ class MyApp extends StatelessWidget {
     return ChangeNotifierProvider<TimerProvider>(
       create: (context) => TimerProvider(),
       child: const MaterialApp(
+        debugShowCheckedModeBanner: false,
         home: Home(),
       ),
     );
