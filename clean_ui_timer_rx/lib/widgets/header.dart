@@ -31,7 +31,7 @@ class _HeaderWidgetState extends State<HeaderWidget> {
   Widget build(BuildContext context) {
     _timerBloc = Provider.of<TimerProvider>(context).bloc;
 
-    return StreamBuilder<Object>(
+    return StreamBuilder<bool>(
       stream: _timerBloc.isTimerStartedObservable,
       builder: (context, snapshot) {
         bool isStarted = snapshot.hasData ? snapshot.data as bool : false;
@@ -95,7 +95,8 @@ class _HeaderWidgetState extends State<HeaderWidget> {
                                   StreamBuilder<String>(
                                       stream: _timerBloc.roundWarningObservable,
                                       builder: (context, snapshot) {
-                                        _roundWarningScrollController = FixedExtentScrollController(initialItem: warningList.indexOf("${snapshot.data}"));
+                                        _roundWarningScrollController = FixedExtentScrollController(
+                                            initialItem: warningList.indexOf("${snapshot.data}"));
 
                                         return GestureDetector(
                                           onTap: () {
@@ -133,7 +134,8 @@ class _HeaderWidgetState extends State<HeaderWidget> {
                                                         GestureDetector(
                                                           onTap: () {
                                                             Navigator.pop(context);
-                                                            _timerBloc.setRoundWarning(warningList[_roundWarningScrollController.selectedItem]);
+                                                            _timerBloc.setRoundWarning(warningList[
+                                                                _roundWarningScrollController.selectedItem]);
                                                           },
                                                           child: Container(
                                                             height: 55,
@@ -195,10 +197,11 @@ class _HeaderWidgetState extends State<HeaderWidget> {
                                     color: Colors.grey[600],
                                   ),
                                   const SizedBox(height: 15),
-                                  StreamBuilder<Object>(
+                                  StreamBuilder<String>(
                                     stream: _timerBloc.breakWarningObservable,
                                     builder: (context, snapshot) {
-                                      _breakWarningScrollController = FixedExtentScrollController(initialItem: warningList.indexOf("${snapshot.data}"));
+                                      _breakWarningScrollController = FixedExtentScrollController(
+                                          initialItem: warningList.indexOf("${snapshot.data}"));
                                       return GestureDetector(
                                         onTap: () {
                                           showModalBottomSheet(
@@ -234,7 +237,8 @@ class _HeaderWidgetState extends State<HeaderWidget> {
                                                       GestureDetector(
                                                         onTap: () {
                                                           Navigator.pop(context);
-                                                          _timerBloc.setBreakWarning(warningList[_breakWarningScrollController.selectedItem]);
+                                                          _timerBloc.setBreakWarning(warningList[
+                                                              _breakWarningScrollController.selectedItem]);
                                                         },
                                                         child: Container(
                                                           height: 55,

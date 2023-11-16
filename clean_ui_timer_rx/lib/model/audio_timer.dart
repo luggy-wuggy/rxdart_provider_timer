@@ -1,10 +1,11 @@
 import 'package:audioplayers/audioplayers.dart';
 
 class AudioTimer {
-  AudioCache player = AudioCache(prefix: 'assets/audio/');
+  AudioPlayer player = AudioPlayer();
 
   AudioTimer() {
-    player.loadAll([
+    player.audioCache.prefix = 'assets/audio/';
+    player.audioCache.loadAll([
       'start_timer_sx.mp3',
       'warning_sx.mp3',
       'start_round_sx.wav',
@@ -13,18 +14,18 @@ class AudioTimer {
   }
 
   playWarning() async {
-    player.play('warning_sx.mp3');
+    player.play(AssetSource('warning_sx.mp3'));
   }
 
   playStartTimer() async {
-    player.play('start_timer_sx.mp3');
+    player.play(AssetSource('start_timer_sx.mp3'));
   }
 
   playRoundStart() async {
-    player.play('start_round_sx.wav');
+    player.play(AssetSource('start_round_sx.wav'));
   }
 
   playRoundEnd() async {
-    player.play('end_round_sx.wav');
+    player.play(AssetSource('end_round_sx.wav'));
   }
 }

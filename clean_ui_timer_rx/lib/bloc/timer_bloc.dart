@@ -51,12 +51,24 @@ class TimerBloc {
     String? breakWarning = prefs.getString('break_warning');
 
     timer != null ? _subjectTimeDisplay.sink.add(timer) : _subjectTimeDisplay.sink.add(initialTimeDisplay);
-    roundTime != null ? _subjectRoundTimeDisplay.sink.add(roundTime) : _subjectRoundTimeDisplay.sink.add(initialRoundTimeDisplay);
-    breakTime != null ? _subjectBreakTimeDisplay.sink.add(breakTime) : _subjectBreakTimeDisplay.sink.add(initialBreakTimeDisplay);
-    totalTime != null ? _subjectTotalTimeDisplay.sink.add(totalTime) : _subjectTotalTimeDisplay.sink.add(initialTotalTimeDisplay);
-    setSetting != null ? _subjectSetSettingDisplay.sink.add(setSetting) : _subjectSetSettingDisplay.sink.add(initialSetSettingDisplay);
-    roundWarning != null ? _subjectRoundWarningDisplay.sink.add(roundWarning) : _subjectRoundWarningDisplay.sink.add(initialRoundWarningDisplay);
-    breakWarning != null ? _subjectBreakWarningDisplay.sink.add(breakWarning) : _subjectBreakWarningDisplay.sink.add(initialBreakWarningDisplay);
+    roundTime != null
+        ? _subjectRoundTimeDisplay.sink.add(roundTime)
+        : _subjectRoundTimeDisplay.sink.add(initialRoundTimeDisplay);
+    breakTime != null
+        ? _subjectBreakTimeDisplay.sink.add(breakTime)
+        : _subjectBreakTimeDisplay.sink.add(initialBreakTimeDisplay);
+    totalTime != null
+        ? _subjectTotalTimeDisplay.sink.add(totalTime)
+        : _subjectTotalTimeDisplay.sink.add(initialTotalTimeDisplay);
+    setSetting != null
+        ? _subjectSetSettingDisplay.sink.add(setSetting)
+        : _subjectSetSettingDisplay.sink.add(initialSetSettingDisplay);
+    roundWarning != null
+        ? _subjectRoundWarningDisplay.sink.add(roundWarning)
+        : _subjectRoundWarningDisplay.sink.add(initialRoundWarningDisplay);
+    breakWarning != null
+        ? _subjectBreakWarningDisplay.sink.add(breakWarning)
+        : _subjectBreakWarningDisplay.sink.add(initialBreakWarningDisplay);
   }
 
   void startTimer() {
@@ -181,34 +193,52 @@ class TimerBloc {
 
     if (_subjectTimeDisplay.value == _subjectRoundWarningDisplay.value && _subjectTimerIsRound.value) {
       _audioTimer.playWarning();
-    } else if (_subjectTimeDisplay.value == _subjectBreakWarningDisplay.value && !_subjectTimerIsRound.value) {
+    } else if (_subjectTimeDisplay.value == _subjectBreakWarningDisplay.value &&
+        !_subjectTimerIsRound.value) {
       _audioTimer.playWarning();
     }
 
-    Duration displayTime = Duration(minutes: int.parse(_subjectTimeDisplay.value.split(":")[0]), seconds: int.parse(_subjectTimeDisplay.value.split(":")[1])) - const Duration(seconds: 1);
+    Duration displayTime = Duration(
+            minutes: int.parse(_subjectTimeDisplay.value.split(":")[0]),
+            seconds: int.parse(_subjectTimeDisplay.value.split(":")[1])) -
+        const Duration(seconds: 1);
 
-    Duration displayTotalTime =
-        Duration(minutes: int.parse(_subjectTotalTimeDisplay.value.split(":")[0]), seconds: int.parse(_subjectTotalTimeDisplay.value.split(":")[1])) - const Duration(seconds: 1);
+    Duration displayTotalTime = Duration(
+            minutes: int.parse(_subjectTotalTimeDisplay.value.split(":")[0]),
+            seconds: int.parse(_subjectTotalTimeDisplay.value.split(":")[1])) -
+        const Duration(seconds: 1);
 
-    final String stringDisplayTime = "${(displayTime.inMinutes % 60).toString()}:${(displayTime.inSeconds % 60).toString().padLeft(2, '0')}";
+    final String stringDisplayTime =
+        "${(displayTime.inMinutes % 60).toString()}:${(displayTime.inSeconds % 60).toString().padLeft(2, '0')}";
 
-    final String stringTotalTime = "${(displayTotalTime.inMinutes % 60).toString()}:${(displayTotalTime.inSeconds % 60).toString().padLeft(2, '0')}";
+    final String stringTotalTime =
+        "${(displayTotalTime.inMinutes % 60).toString()}:${(displayTotalTime.inSeconds % 60).toString().padLeft(2, '0')}";
 
     _subjectTimeDisplay.sink.add(stringDisplayTime);
     _subjectTotalTimeDisplay.sink.add(stringTotalTime);
   }
 
   Future<void> _updateTotalTimeByRewind() async {
-    Duration totalTime = Duration(minutes: int.parse(_subjectTotalTimeDisplay.value.split(":")[0]), seconds: int.parse(_subjectTotalTimeDisplay.value.split(":")[1]));
+    Duration totalTime = Duration(
+        minutes: int.parse(_subjectTotalTimeDisplay.value.split(":")[0]),
+        seconds: int.parse(_subjectTotalTimeDisplay.value.split(":")[1]));
 
     Duration elapsedTime;
 
     if (_subjectTimerIsRound.value) {
-      elapsedTime = Duration(minutes: int.parse(_subjectRoundTimeDisplay.value.split(":")[0]), seconds: int.parse(_subjectRoundTimeDisplay.value.split(":")[1])) -
-          Duration(minutes: int.parse(_subjectTimeDisplay.value.split(":")[0]), seconds: int.parse(_subjectTimeDisplay.value.split(":")[1]));
+      elapsedTime = Duration(
+              minutes: int.parse(_subjectRoundTimeDisplay.value.split(":")[0]),
+              seconds: int.parse(_subjectRoundTimeDisplay.value.split(":")[1])) -
+          Duration(
+              minutes: int.parse(_subjectTimeDisplay.value.split(":")[0]),
+              seconds: int.parse(_subjectTimeDisplay.value.split(":")[1]));
     } else {
-      elapsedTime = Duration(minutes: int.parse(_subjectBreakTimeDisplay.value.split(":")[0]), seconds: int.parse(_subjectBreakTimeDisplay.value.split(":")[1])) -
-          Duration(minutes: int.parse(_subjectTimeDisplay.value.split(":")[0]), seconds: int.parse(_subjectTimeDisplay.value.split(":")[1]));
+      elapsedTime = Duration(
+              minutes: int.parse(_subjectBreakTimeDisplay.value.split(":")[0]),
+              seconds: int.parse(_subjectBreakTimeDisplay.value.split(":")[1])) -
+          Duration(
+              minutes: int.parse(_subjectTimeDisplay.value.split(":")[0]),
+              seconds: int.parse(_subjectTimeDisplay.value.split(":")[1]));
     }
 
     totalTime = totalTime + elapsedTime;
@@ -216,9 +246,11 @@ class TimerBloc {
     String stringTotalTime;
 
     if (totalTime < const Duration(hours: 1)) {
-      stringTotalTime = "${(totalTime.inMinutes % 60).toString()}:${(totalTime.inSeconds % 60).toString().padLeft(2, '0')}";
+      stringTotalTime =
+          "${(totalTime.inMinutes % 60).toString()}:${(totalTime.inSeconds % 60).toString().padLeft(2, '0')}";
     } else {
-      stringTotalTime = "${(totalTime.inHours % 60).toString()}:${(totalTime.inMinutes % 60).toString().padLeft(2, '0')}:${(totalTime.inSeconds % 60).toString().padLeft(2, '0')}";
+      stringTotalTime =
+          "${(totalTime.inHours % 60).toString()}:${(totalTime.inMinutes % 60).toString().padLeft(2, '0')}:${(totalTime.inSeconds % 60).toString().padLeft(2, '0')}";
     }
 
     _subjectTotalTimeDisplay.sink.add(stringTotalTime);
@@ -228,17 +260,23 @@ class TimerBloc {
 
   void _updateTotalTime() async {
     int set = int.parse(_subjectSetSettingDisplay.value);
-    Duration roundTime = Duration(minutes: int.parse(_subjectRoundTimeDisplay.value.split(":")[0]), seconds: int.parse(_subjectRoundTimeDisplay.value.split(":")[1]));
+    Duration roundTime = Duration(
+        minutes: int.parse(_subjectRoundTimeDisplay.value.split(":")[0]),
+        seconds: int.parse(_subjectRoundTimeDisplay.value.split(":")[1]));
 
-    Duration breakTime = Duration(minutes: int.parse(_subjectBreakTimeDisplay.value.split(":")[0]), seconds: int.parse(_subjectBreakTimeDisplay.value.split(":")[1]));
+    Duration breakTime = Duration(
+        minutes: int.parse(_subjectBreakTimeDisplay.value.split(":")[0]),
+        seconds: int.parse(_subjectBreakTimeDisplay.value.split(":")[1]));
 
     Duration totalTime = (roundTime + breakTime) * set;
     String stringTotalTime;
 
     if (totalTime < const Duration(hours: 1)) {
-      stringTotalTime = "${(totalTime.inMinutes % 60).toString()}:${(totalTime.inSeconds % 60).toString().padLeft(2, '0')}";
+      stringTotalTime =
+          "${(totalTime.inMinutes % 60).toString()}:${(totalTime.inSeconds % 60).toString().padLeft(2, '0')}";
     } else {
-      stringTotalTime = "${(totalTime.inHours % 60).toString()}:${(totalTime.inMinutes % 60).toString().padLeft(2, '0')}:${(totalTime.inSeconds % 60).toString().padLeft(2, '0')}";
+      stringTotalTime =
+          "${(totalTime.inHours % 60).toString()}:${(totalTime.inMinutes % 60).toString().padLeft(2, '0')}:${(totalTime.inSeconds % 60).toString().padLeft(2, '0')}";
     }
 
     _subjectTotalTimeDisplay.sink.add(stringTotalTime);

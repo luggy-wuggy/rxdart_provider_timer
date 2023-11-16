@@ -16,17 +16,17 @@ class TimerWidget extends StatelessWidget {
   Widget build(BuildContext context) {
     _timerBloc = Provider.of<TimerProvider>(context).bloc;
 
-    return StreamBuilder<Object>(
+    return StreamBuilder<bool>(
       stream: _timerBloc.isPlayingObservable,
       builder: (context, snapshot) {
         isPlaying = snapshot.hasData ? snapshot.data as bool : false;
 
-        return StreamBuilder<Object>(
+        return StreamBuilder<bool>(
           stream: _timerBloc.isTimerRoundObservable,
           builder: (context, snapshot) {
             isTimerRound = snapshot.hasData ? snapshot.data as bool : false;
 
-            return StreamBuilder<Object>(
+            return StreamBuilder<bool>(
               stream: _timerBloc.isTimerStartedObservable,
               builder: (context, snapshot) {
                 bool isStarted = snapshot.hasData ? snapshot.data as bool : false;
@@ -75,7 +75,7 @@ class TimerWidget extends StatelessWidget {
                   child: Column(
                     mainAxisAlignment: MainAxisAlignment.center,
                     children: [
-                      StreamBuilder<Object>(
+                      StreamBuilder<String>(
                         stream: _timerBloc.setTimerObservable,
                         builder: (context, snapshot) {
                           return Text(
@@ -89,7 +89,7 @@ class TimerWidget extends StatelessWidget {
                         width: 75,
                         color: Colors.white,
                       ),
-                      StreamBuilder<Object>(
+                      StreamBuilder<String>(
                         stream: _timerBloc.timeObservable,
                         builder: (context, snapshot) {
                           return Text('${snapshot.data}', style: kTimerStyle);

@@ -52,12 +52,12 @@ class _BottomBarWidgetState extends State<BottomBarWidget> {
               ),
             ),
           ),
-          StreamBuilder<Object>(
+          StreamBuilder<bool>(
             stream: _timerBloc.isPlayingObservable,
             builder: (context, snapshot) {
               isPlaying = snapshot.hasData ? snapshot.data as bool : false;
 
-              return StreamBuilder<Object>(
+              return StreamBuilder<bool>(
                 stream: _timerBloc.isTimerStartedObservable,
                 builder: (context, started) {
                   bool isStarted = started.hasData ? started.data as bool : false;

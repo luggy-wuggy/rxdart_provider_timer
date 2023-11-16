@@ -30,7 +30,7 @@ class _SubHeaderWidgetState extends State<SubHeaderWidget> {
   Widget build(BuildContext context) {
     _timerBloc = Provider.of<TimerProvider>(context).bloc;
 
-    return StreamBuilder<Object>(
+    return StreamBuilder<bool>(
       stream: _timerBloc.isTimerStartedObservable,
       builder: (context, snapshot) {
         bool isStarted = snapshot.hasData ? snapshot.data as bool : false;
@@ -42,12 +42,13 @@ class _SubHeaderWidgetState extends State<SubHeaderWidget> {
             child: Row(
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
-                StreamBuilder<Object>(
+                StreamBuilder<String>(
                   stream: _timerBloc.setSettingObservable,
                   builder: (context, snapshot) {
                     return GestureDetector(
                       onTap: () async {
-                        _setsScrollController = FixedExtentScrollController(initialItem: setsList.indexOf("${snapshot.data}"));
+                        _setsScrollController =
+                            FixedExtentScrollController(initialItem: setsList.indexOf("${snapshot.data}"));
                         await showModalBottomSheet(
                           backgroundColor: Colors.transparent,
                           elevation: 0,
@@ -133,7 +134,7 @@ class _SubHeaderWidgetState extends State<SubHeaderWidget> {
                     );
                   },
                 ),
-                StreamBuilder<Object>(
+                StreamBuilder<String>(
                   stream: _timerBloc.roundTimeObservable,
                   builder: (context, snapshot) {
                     String roundStringTime = "${snapshot.data}";
@@ -183,7 +184,8 @@ class _SubHeaderWidgetState extends State<SubHeaderWidget> {
                                     GestureDetector(
                                       onTap: () {
                                         Navigator.pop(context);
-                                        roundStringTime = "${(roundDurationTime.inMinutes % 60).toString()}:${(roundDurationTime.inSeconds % 60).toString().padLeft(2, '0')}";
+                                        roundStringTime =
+                                            "${(roundDurationTime.inMinutes % 60).toString()}:${(roundDurationTime.inSeconds % 60).toString().padLeft(2, '0')}";
 
                                         _timerBloc.setRoundTime(roundStringTime);
                                       },
@@ -235,7 +237,7 @@ class _SubHeaderWidgetState extends State<SubHeaderWidget> {
                     );
                   },
                 ),
-                StreamBuilder<Object>(
+                StreamBuilder<String>(
                   stream: _timerBloc.breakTimeObservable,
                   builder: (context, snapshot) {
                     String breakStringTime = '${snapshot.data}';
@@ -285,7 +287,8 @@ class _SubHeaderWidgetState extends State<SubHeaderWidget> {
                                     GestureDetector(
                                       onTap: () {
                                         Navigator.pop(context);
-                                        breakStringTime = "${(breakDurationTime.inMinutes % 60).toString()}:${(breakDurationTime.inSeconds % 60).toString().padLeft(2, '0')}";
+                                        breakStringTime =
+                                            "${(breakDurationTime.inMinutes % 60).toString()}:${(breakDurationTime.inSeconds % 60).toString().padLeft(2, '0')}";
 
                                         _timerBloc.setBreakTime(breakStringTime);
                                       },
@@ -343,7 +346,7 @@ class _SubHeaderWidgetState extends State<SubHeaderWidget> {
                   children: [
                     Text('TOTAL TIME', style: kSubTitleTabStyle),
                     const SizedBox(height: 6),
-                    StreamBuilder<Object>(
+                    StreamBuilder<String>(
                       stream: _timerBloc.totalTimeObservable,
                       builder: (context, snapshot) {
                         return Text('${snapshot.data}', style: kTitleTabStyle);
